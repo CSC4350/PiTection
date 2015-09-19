@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Welcome"
+        android:text="@string/welcome_login"
         android:paddingLeft="125dp"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="User"
+        android:text="@string/user_login_default"
         android:ems="10"
         android:id="@+id/editText"
         android:layout_below="@+id/textView"
@@ -46,8 +46,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/button"
+        android:text="@string/login_button"
+        android:id="@+id/loginbtn"
         android:layout_below="@+id/editText2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp" />
