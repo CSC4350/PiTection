@@ -6,4 +6,7 @@
     <string name="login_button">Login</string>
     <string name="user_login_default">Username</string>
     <string name="welcome_login">Welcome</string>
+    <string name="login_auto">Automatic Login</string>
+    <string name="login_error">Invalid Login</string>
+    <string name="login_ok">Login Ok!</string>
 </resources>

@@ -4,6 +4,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.*;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -11,6 +14,35 @@ public class MainScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
+
+        //Get buttons and input fields
+        Button loginBtn = (Button) findViewById(R.id.loginBtn);
+        final EditText username = (EditText) findViewById(R.id.usernameField);
+       final  EditText password = (EditText) findViewById(R.id.passwordField);
+        final TextView loginError = (TextView) findViewById(R.id.loginError);
+
+        //Test for login credentials, pop ok
+        final TextView loginOk = (TextView) findViewById(R.id.textView2);
+
+        //Test user and pass for form validation
+       final String userCheck = "user";
+        final String userPass = "1234";
+        //Login event handlers with form validation
+
+       loginBtn.setOnClickListener(
+               new Button.OnClickListener(){
+                   public void onClick(View v){
+                       if(username.getText().toString().equals(userCheck) && password.getText().toString().equals(userPass)){
+                           loginOk.setVisibility(View.VISIBLE);
+                       }
+                       else{
+                           loginError.setVisibility(View.VISIBLE);
+                       }
+
+                   }
+               }
+       );
+
     }
 
     @Override
