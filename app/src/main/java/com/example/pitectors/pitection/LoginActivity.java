@@ -12,6 +12,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText username, password;
     Button loginBtn;
     UserLocalStore userLocalStore;
+
+    //Test credentials for login
+    String defaultUser = "Rob";
+    String defaultPassword = "Nice";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         loginBtn.setOnClickListener(this);
         userLocalStore = new UserLocalStore(this);
+
     }
 
     @Override
@@ -72,11 +77,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.loginBtn:
+                if(username.getText().toString().equals(defaultUser) && password.getText().toString().equals(defaultPassword)){
+                    Intent intent = new Intent(this,MainScreen.class);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
+                }
+               // User user = new User(null, null);
 
-                User user = new User(null, null);
-
-                userLocalStore.storeUserData(user);
-                userLocalStore.setUserLoggedIn(true);
+                //userLocalStore.storeUserData(user);
+                //userLocalStore.setUserLoggedIn(true);
+                break;
+            case R.id.btnRegister:
+                Intent intent = new Intent(this,RegisterActivity.class);
+                startActivity(intent);
 
 
         }
