@@ -1,5 +1,8 @@
 package com.example.pitectors.pitection;
-
+/**
+ * This will be the main screen for the app once the user is logged in,
+ * will display system status, show security point errors, and have a settings option
+ */
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;

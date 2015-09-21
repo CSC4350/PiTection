@@ -1,4 +1,9 @@
 package com.example.pitectors.pitection;
+/**This is the current launch screen for the application, checks credentials
+ * and does a very simple validation check. Using Toast to display a quick error message
+ * if login creds are incorrect
+ *
+ */
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,14 +19,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     UserLocalStore userLocalStore;
 
     //Test credentials for login
-    String defaultUser = "Rob";
-    String defaultPassword = "Nice";
+    String defaultUser = "Pi";
+    String defaultPassword = "Tection";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Get buttons and input fields
+        //Assigns buttons and input fields
         loginBtn = (Button) findViewById(R.id.loginBtn);
         username = (EditText) findViewById(R.id.usernameField);
         password = (EditText) findViewById(R.id.passwordField);
@@ -53,6 +58,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
+    //Methods to be used once Http requests can be established for the app
+    /**
     @Override
     protected void onStart(){
         super.onStart();
@@ -72,7 +79,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     }
-
+*/
+    //Switch statement for onClick listeners, loginbtn checks login credentials, btnRegister will
+    //change screen to the user register activity.
     @Override
     public void onClick(View v) {
         switch(v.getId()){
