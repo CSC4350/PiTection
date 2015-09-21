@@ -5,41 +5,31 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.*;
+import android.content.Intent;
 
-
-public class MainScreen extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText username, password;
-    Button logoutBtn;
+    Button loginBtn;
     UserLocalStore userLocalStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_screen);
-
+        setContentView(R.layout.activity_login);
 
         //Get buttons and input fields
-        logoutBtn = (Button) findViewById(R.id.logoutBtn);
-       username = (EditText) findViewById(R.id.usernameField);
-       password = (EditText) findViewById(R.id.passwordField);
-        final TextView loginError = (TextView) findViewById(R.id.loginError);
+        loginBtn = (Button) findViewById(R.id.loginBtn);
+        username = (EditText) findViewById(R.id.usernameField);
+        password = (EditText) findViewById(R.id.passwordField);
 
-        //Test for login credentials, pop ok
-        final TextView loginOk = (TextView) findViewById(R.id.textView2);
-
-        logoutBtn.setOnClickListener(this);
-
+        loginBtn.setOnClickListener(this);
         userLocalStore = new UserLocalStore(this);
-
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main_screen, menu);
+        getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
 
@@ -59,12 +49,37 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     }
 
     @Override
+    protected void onStart(){
+        super.onStart();
+        if(authenticate() == true){
+            Intent intent = new Intent(this,MainScreen.class);
+           startActivity(intent);
+        }
+    }
+
+    private boolean authenticate(){
+        return userLocalStore.getUserLoggedIn();
+
+    }
+
+    private void displayUserDetails(){
+        User user = userLocalStore.getLoggedInUser();
+
+
+    }
+
+    @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.logoutBtn:
-                userLocalStore.clearUserData();
-                userLocalStore.setUserLoggedIn(false);
+            case R.id.loginBtn:
+
+                User user = new User(null, null);
+
+                userLocalStore.storeUserData(user);
+                userLocalStore.setUserLoggedIn(true);
+
 
         }
+
     }
 }
