@@ -3,6 +3,8 @@ package com.example.pitectors.pitection;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import java.util.Hashtable;
+import android.provider.Settings;
 
 
 /**
@@ -43,6 +45,11 @@ public class ServerRequest {
         protected Void doInBackground(Void... params) {
 
             //Access the server
+            Hashtable<String, String> dataToSend = new Hashtable<String, String>() ;
+            dataToSend.put("user", user.username);
+            dataToSend.put("password", user.password);
+
+
 
             return null;
         }
