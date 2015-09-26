@@ -84,5 +84,13 @@
         android:visibility="invisible"
         android:textColor="#32ff5e" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/registerBtn"
+        android:id="@+id/registerBtn"
+        android:layout_alignTop="@+id/loginError"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
 

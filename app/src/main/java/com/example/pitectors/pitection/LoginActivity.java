@@ -5,6 +5,8 @@ package com.example.pitectors.pitection;
  *
  */
 
+import android.content.Context;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,9 +15,17 @@ import android.view.View;
 import android.widget.*;
 import android.content.Intent;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.*;
+import android.net.ConnectivityManager;
+
+import java.net.HttpURLConnection;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText username, password;
-    Button loginBtn;
+    Button loginBtn, registerBtn;
     UserLocalStore userLocalStore;
 
     //Test credentials for login
@@ -27,12 +37,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         //Assigns buttons and input fields
+        registerBtn = (Button) findViewById(R.id.registerBtn);
         loginBtn = (Button) findViewById(R.id.loginBtn);
         username = (EditText) findViewById(R.id.usernameField);
         password = (EditText) findViewById(R.id.passwordField);
 
         loginBtn.setOnClickListener(this);
         userLocalStore = new UserLocalStore(this);
+        registerBtn.setOnClickListener(this);
 
     }
 
@@ -58,30 +70,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
+	protected boolean authenticate(String username, String password) throws MalformedURLException {
+		URL url = new URL("localhost/getData.php");
+		try {
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			StringBuilder sb = new StringBuilder();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+			String line;
+			while((line = reader.readLine()) != null){
+				sb.append(line + " ");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
     //Methods to be used once Http requests can be established for the app
-    /**
-    @Override
-    protected void onStart(){
-        super.onStart();
-        if(authenticate() == true){
-            Intent intent = new Intent(this,MainScreen.class);
-           startActivity(intent);
-        }
-    }
-
-    private boolean authenticate(){
-        return userLocalStore.getUserLoggedIn();
-
-    }
-
-    private void displayUserDetails(){
-        User user = userLocalStore.getLoggedInUser();
+  protected void updateDisplay(String message){
+      Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+  }
 
 
-    }
-*/
     //Switch statement for onClick listeners, loginbtn checks login credentials, btnRegister will
-    //change screen to the user register activity.
+    //change screen to the user register activity. IF ADDING NEW BUTTONS!! Make sure to call the
+    //onSetClickLister() method on them before adding them to the switch statement
     @Override
     public void onClick(View v) {
         switch(v.getId()){
@@ -93,14 +106,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 else{
                     Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
                 }
-               // User user = new User(null, null);
-
-                //userLocalStore.storeUserData(user);
-                //userLocalStore.setUserLoggedIn(true);
                 break;
-            case R.id.btnRegister:
-                Intent intent = new Intent(this,RegisterActivity.class);
-                startActivity(intent);
+                  case R.id.registerBtn:
+                Intent regIntent = new Intent(this,RegisterActivity.class);
+                startActivity(regIntent);
+                      break;
+            default:
+                Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
 
 
         }

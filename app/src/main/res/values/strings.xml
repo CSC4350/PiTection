@@ -19,6 +19,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="logoutButton">Logout</string>
+    <string name="registerBtn">Register</string>
 
 
 </resources>
