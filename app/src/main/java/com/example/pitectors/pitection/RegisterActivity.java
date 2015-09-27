@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.json.JSONException;
+
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnRegister;
     EditText username, password, confirmPass;
@@ -47,6 +49,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+
+
     protected boolean isOnline(){
         ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -63,12 +67,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.btnRegister:
-                MyTask task = new MyTask();
+
                 String uname = username.toString();
                 String pass = password.toString();
 
                 if(isOnline()){
-                    requestData(task, uname);
+                    requestData("http://webapp2/getData.php");
                 }
                 else{
                     Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
@@ -82,8 +86,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
     //Thread pool executer allows multiple tasks in parallel
-    private void requestData(MyTask task, String uname) {
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "Ok, ", uname, "");
+    private void requestData( String uri) {
+        MyTask task = new MyTask();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
     }
 
     //Class to instantiate the Async Task class for running
@@ -99,21 +104,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected String doInBackground(String... params) {
-
-            //Prolong task for progress bar demo purposes
-            try{
-                Thread.sleep(1000);
-            }catch(InterruptedException e){
-                e.printStackTrace();
-            }
-            return "You're registered";
+                String content = HttpManager.getData(params[0]);
+            return content;
         }
 
         //This method receives a result, depending
         //on the AsyncTask<> data parameter type
         @Override
         protected void onPostExecute(String s) {
-           updateDisplay(s);
+            JsonParser parse = new JsonParser();
+            try {
+                parse.parseFeed(s);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            updateDisplay(s);
             pb.setVisibility(View.INVISIBLE);
         }
     }

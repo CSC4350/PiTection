@@ -70,22 +70,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
-	protected boolean authenticate(String username, String password) throws MalformedURLException {
-		URL url = new URL("localhost/getData.php");
-		try {
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			StringBuilder sb = new StringBuilder();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
-			String line;
-			while((line = reader.readLine()) != null){
-				sb.append(line + " ");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
     //Methods to be used once Http requests can be established for the app
   protected void updateDisplay(String message){
       Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();

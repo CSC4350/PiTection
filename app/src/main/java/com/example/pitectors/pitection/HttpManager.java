@@ -24,6 +24,7 @@ public class HttpManager {
             while ((line = rd.readLine()) != null) {
                 sb.append(line + "\n");
             }
+			JsonParser parse = new JsonParser();
 
             return sb.toString();
         } catch (Exception e) {
