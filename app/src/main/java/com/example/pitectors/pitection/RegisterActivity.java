@@ -72,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String pass = password.toString();
 
                 if(isOnline()){
-                    requestData("http://webapp2/getData.php");
+                    requestData("http://api.openweathermap.org/data/2.5/forecast?q=London,us&mode=xml");
                 }
                 else{
                     Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
