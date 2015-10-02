@@ -16,10 +16,13 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.util.List;
+
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnRegister;
     EditText username, password, confirmPass;
     ProgressBar pb;
+	List<User> userList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +40,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void updateDisplay(String s) {
-        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+    private void updateDisplay() {
+	    if(userList != null){
+		    for(User user: userList){
+			    Toast.makeText(this,user.getPassword(),Toast.LENGTH_SHORT).show();
+		    }
+
+	    }
+	    else{
+		    Toast.makeText(this, "I didn't get anything", Toast.LENGTH_SHORT).show();
+	    }
+
     }
 
     @Override
@@ -72,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String pass = password.toString();
 
                 if(isOnline()){
-                    requestData("http://api.openweathermap.org/data/2.5/forecast?q=London,us&mode=xml");
+                    requestData("http://jsonplaceholder.typicode.com/users");
                 }
                 else{
                     Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
@@ -82,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-                User user = new User(uname, pass);
+                //User user = new User(uname, pass);
         }
     }
     //Thread pool executer allows multiple tasks in parallel
@@ -98,7 +110,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //and runs before doInBackground
         @Override
         protected void onPreExecute() {
-           updateDisplay("Starting task");
             pb.setVisibility(View.VISIBLE);
         }
 
@@ -112,14 +123,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //on the AsyncTask<> data parameter type
         @Override
         protected void onPostExecute(String s) {
-            JsonParser parse = new JsonParser();
-            try {
-                parse.parseFeed(s);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            updateDisplay(s);
-            pb.setVisibility(View.INVISIBLE);
+	        try {
+
+		        userList = JsonParser.parseFeed(s);
+		        updateDisplay();
+
+		        pb.setVisibility(View.INVISIBLE);
+	        } catch (Exception e) {
+		        e.printStackTrace();
+	        }
+
+
         }
     }
 

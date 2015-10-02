@@ -26,6 +26,7 @@ public class HttpManager {
             }
 			JsonParser parse = new JsonParser();
 
+
             return sb.toString();
         } catch (Exception e) {
 

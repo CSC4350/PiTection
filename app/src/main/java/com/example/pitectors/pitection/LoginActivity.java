@@ -7,6 +7,7 @@ package com.example.pitectors.pitection;
 
 import android.content.Context;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,11 +23,16 @@ import java.net.*;
 import android.net.ConnectivityManager;
 
 import java.net.HttpURLConnection;
+import java.util.List;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText username, password;
     Button loginBtn, registerBtn;
     UserLocalStore userLocalStore;
+    ProgressBar pb;
+    List<User> userList;
 
     //Test credentials for login
     String defaultUser = "Pi";
@@ -55,6 +61,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return true;
     }
 
+
+    protected boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if(netInfo != null && netInfo.isConnectedOrConnecting()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -71,10 +89,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    //Methods to be used once Http requests can be established for the app
-  protected void updateDisplay(String message){
-      Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-  }
 
 
     //Switch statement for onClick listeners, loginbtn checks login credentials, btnRegister will
@@ -84,12 +98,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.loginBtn:
-                if(username.getText().toString().equals(defaultUser) && password.getText().toString().equals(defaultPassword)){
-                    Intent intent = new Intent(this,MainScreen.class);
-                    startActivity(intent);
+
+                if(isOnline()){
+                    requestData("http://localhost/getData.php");
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,"Network isn't available", LENGTH_SHORT).show();
                 }
                 break;
                   case R.id.registerBtn:
@@ -97,10 +111,72 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(regIntent);
                       break;
             default:
-                Toast.makeText(getApplicationContext(), "Invalid credentials", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Invalid credentials", LENGTH_SHORT).show();
 
 
         }
 
     }
+
+    //Thread pool executer allows multiple tasks in parallel
+    private void requestData( String uri) {
+        MyTask task = new MyTask();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
+    }
+
+    //Class to instantiate the Async Task class for running
+    //Http Requests in the background
+    private class MyTask extends AsyncTask<String, String, String>{
+        //This method has access to the main thread
+        //and runs before doInBackground
+        @Override
+        protected void onPreExecute() {
+            pb.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String content = HttpManager.getData(params[0]);
+            return content;
+        }
+
+        //This method receives a result, depending
+        //on the AsyncTask<> data parameter type
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+
+                userList = JsonParser.parseFeed(s);
+               if(authenticate()){
+                   Intent intent = new Intent(getApplicationContext(),MainScreen.class);
+                   startActivity(intent);
+               }
+                else{
+                   Toast.makeText(getApplicationContext(),"Invalid credentials", Toast.LENGTH_SHORT).show();
+               }
+
+                pb.setVisibility(View.INVISIBLE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
 }
+
+    private boolean authenticate() {
+        for(User user: userList){
+            if(  username.getText().toString().equals(user.getUsername()) &&
+                    password.getText().toString().equals(user.getPassword())){
+                return true;
+            }
+            else{
+                return false;
+            }
+
+        }
+
+        return false;
+    }
+
+    }

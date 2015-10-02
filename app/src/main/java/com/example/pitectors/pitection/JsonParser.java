@@ -10,20 +10,24 @@ import org.json.JSONObject;
  */
 public class JsonParser {
 
-	public static  List<User> parseFeed(String content) throws JSONException {
+	public static  List<User> parseFeed(String content)  {
+		try {
+			JSONArray ja = new JSONArray(content);
+			List<User> userList = new ArrayList<>();
 
-		JSONArray ja = new JSONArray(content);
-		List<User> userList = new ArrayList<>();
+			for (int i = 0; i < ja.length(); i++) {
+				JSONObject obj = ja.getJSONObject(i);
+				User user = new User();
 
-		for(int i = 0; i < ja.length(); i++) {
-			JSONObject obj = ja.getJSONObject(i);
-			User user = new User();
+				user.setUsername(obj.getString("name"));
+				user.setPassword(obj.getString("pass"));
 
-			user.getUsername(obj.getString("name"));
-			user.getPassword(obj.getString("pass"));
-
-			userList.add(user);
+				userList.add(user);
+			}
+			return userList;
+		}catch(JSONException e){
+			e.printStackTrace();
+			return null;
 		}
-		return userList;
 	}
 }
