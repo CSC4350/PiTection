@@ -1,4 +1,6 @@
 package com.example.pitectors.pitection;
+import android.widget.Button;
+
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -19,12 +21,43 @@ public class JsonParser {
 				JSONObject obj = ja.getJSONObject(i);
 				User user = new User();
 
+
 				user.setUsername(obj.getString("name"));
-				user.setPassword(obj.getString("pass"));
+				user.setPassword(obj.getString("city"));
+
+
+
+
+
 
 				userList.add(user);
+
 			}
 			return userList;
+
+		}catch(JSONException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static  List<UserDeviceStatus> parseDeviceFeed(String content)  {
+		try {
+			JSONArray ja = new JSONArray(content);
+
+			List<UserDeviceStatus> devices = new ArrayList<>();
+
+			for (int i = 0; i < ja.length(); i++) {
+				JSONObject obj = ja.getJSONObject(i);
+				UserDeviceStatus devicesListed = new UserDeviceStatus(obj.getString("name"), obj.getString("city"));
+
+
+
+
+
+				devices.add(devicesListed);
+			}
+			return devices;
 		}catch(JSONException e){
 			e.printStackTrace();
 			return null;

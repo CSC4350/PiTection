@@ -15,7 +15,7 @@
     <string name="registerUsername">Username</string>
     <string name="registerButton">Register</string>
     <string name="registerPassword">Enter Password</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Main Screen</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="logoutButton">Logout</string>

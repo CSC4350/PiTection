@@ -25,8 +25,16 @@
         android:layout_height="wrap_content"
         android:text="@string/logoutButton"
         android:id="@+id/logoutBtn"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listView"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/logoutBtn"
+        android:layout_below="@+id/textView"/>
 
 
 </RelativeLayout>

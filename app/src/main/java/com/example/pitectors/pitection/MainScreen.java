@@ -3,6 +3,12 @@ package com.example.pitectors.pitection;
  * This will be the main screen for the app once the user is logged in,
  * will display system status, show security point errors, and have a settings option
  */
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,11 +17,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
     EditText username, password;
     Button logoutBtn;
-    UserLocalStore userLocalStore;
+    ListView deviceList;
+    List<UserDeviceStatus> devicesToList;
+    ProgressBar pb;
+    ArrayAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,14 +38,17 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         logoutBtn = (Button) findViewById(R.id.logoutBtn);
        username = (EditText) findViewById(R.id.usernameField);
        password = (EditText) findViewById(R.id.passwordField);
-        final TextView loginError = (TextView) findViewById(R.id.loginError);
-
-        //Test for login credentials, pop ok
-        final TextView loginOk = (TextView) findViewById(R.id.textView2);
+       deviceList = (ListView) findViewById(R.id.listView);
 
         logoutBtn.setOnClickListener(this);
 
-        userLocalStore = new UserLocalStore(this);
+
+        if(isOnline()){
+            requestData("http://jsonplaceholder.typicode.com/users");
+        }
+        else{
+            Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
+        }
 
 
 
@@ -61,13 +76,83 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         return super.onOptionsItemSelected(item);
     }
 
+    //Takes user to log in screen
     @Override
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.logoutBtn:
-                userLocalStore.clearUserData();
-                userLocalStore.setUserLoggedIn(false);
+                Intent regIntent = new Intent(this,LoginActivity.class);
+                startActivity(regIntent);
 
         }
     }
+    //Checks network connectivity
+    protected boolean isOnline(){
+        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if(netInfo != null && netInfo.isConnectedOrConnecting()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    //Adds items to listView
+    private void updateDisplay() {
+        if(devicesToList != null){
+            ArrayList<String> deviceNames = new ArrayList<>();
+            for(UserDeviceStatus devices: devicesToList) {
+
+                    deviceNames.add(devices.getDeviceName());
+
+            }
+            adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceNames);
+            deviceList.setAdapter(adapter);
+        }
+        else{
+            Toast.makeText(this,"Unable to connect to devices", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //Thread pool executer allows multiple tasks in parallel
+    private void requestData( String uri) {
+        MyTask task = new MyTask();
+        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
+    }
+
+    //Class to instantiate the Async Task class for running
+    //Http Requests in the background
+    private class MyTask extends AsyncTask<String, String, String>{
+        //This method has access to the main thread
+        //and runs before doInBackground
+        @Override
+        protected void onPreExecute() {
+            pb.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String content = HttpManager.getData(params[0]);
+            return content;
+        }
+
+        //This method receives a result, depending
+        //on the AsyncTask<> data parameter type
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+
+                devicesToList = JsonParser.parseDeviceFeed(s);
+                updateDisplay();
+
+                pb.setVisibility(View.INVISIBLE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
+
 }

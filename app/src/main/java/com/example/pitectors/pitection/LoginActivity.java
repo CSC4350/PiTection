@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.loginBtn:
 
                 if(isOnline()){
-                    requestData("http://localhost/getData.php");
+                    requestData("http://jsonplaceholder.typicode.com/users");
                 }
                 else{
                     Toast.makeText(this,"Network isn't available", LENGTH_SHORT).show();
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //and runs before doInBackground
         @Override
         protected void onPreExecute() {
-            pb.setVisibility(View.VISIBLE);
+
         }
 
         @Override
@@ -147,15 +147,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             try {
 
                 userList = JsonParser.parseFeed(s);
-               if(authenticate()){
-                   Intent intent = new Intent(getApplicationContext(),MainScreen.class);
-                   startActivity(intent);
-               }
-                else{
-                   Toast.makeText(getApplicationContext(),"Invalid credentials", Toast.LENGTH_SHORT).show();
-               }
+                authenticate();
 
-                pb.setVisibility(View.INVISIBLE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -164,19 +157,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 }
 
-    private boolean authenticate() {
+    private void authenticate() {
         for(User user: userList){
-            if(  username.getText().toString().equals(user.getUsername()) &&
+            /*if(  username.getText().toString().equals(user.getUsername()) &&
                     password.getText().toString().equals(user.getPassword())){
-                return true;
+                Intent intent = new Intent(getApplicationContext(),MainScreen.class);
+                startActivity(intent);
             }
             else{
-                return false;
+                Toast.makeText(getApplicationContext(),"Invalid credentials", Toast.LENGTH_SHORT).show();
             }
+            */
+            Toast.makeText(this,user.getPassword(),Toast.LENGTH_SHORT).show();
 
         }
 
-        return false;
+
+
     }
 
     }
