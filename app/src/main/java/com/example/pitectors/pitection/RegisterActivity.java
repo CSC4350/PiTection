@@ -70,7 +70,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
     }
-
+/*todo Need to add data validation for user registration, check if user exists, password should be 6-9 characters, make sure passwords match.
+ */
 
     @Override
     public void onClick(View v) {
