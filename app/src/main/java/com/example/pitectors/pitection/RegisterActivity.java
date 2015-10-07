@@ -21,7 +21,6 @@ import java.util.List;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnRegister;
     EditText username, password, confirmPass;
-    ProgressBar pb;
 	List<User> userList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +31,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         password = (EditText) findViewById(R.id.registerUserpass);
         confirmPass = (EditText) findViewById(R.id.registerConfirm);
         btnRegister = (Button) findViewById(R.id.btnRegister);
-        pb = (ProgressBar) findViewById(R.id.progressBar);
+
         btnRegister.setOnClickListener(this);
 
-        //Make sure the progress bar is invisible on startup
-        pb.setVisibility(View.INVISIBLE);
 
     }
 
@@ -110,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //and runs before doInBackground
         @Override
         protected void onPreExecute() {
-            pb.setVisibility(View.VISIBLE);
+
         }
 
         @Override
@@ -128,7 +125,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 		        userList = JsonParser.parseFeed(s);
 		        updateDisplay();
 
-		        pb.setVisibility(View.INVISIBLE);
 	        } catch (Exception e) {
 		        e.printStackTrace();
 	        }

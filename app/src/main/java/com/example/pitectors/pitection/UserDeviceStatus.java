@@ -12,6 +12,10 @@ public class UserDeviceStatus {
 	String status;
 	String deviceName;
 
+	public UserDeviceStatus(){
+
+	}
+
 	public UserDeviceStatus( String deviceName, String status) {
 		this.status = status;
 		this.deviceName = deviceName;

@@ -3,7 +3,7 @@ package com.example.pitectors.pitection;
  * This will be the main screen for the app once the user is logged in,
  * will display system status, show security point errors, and have a settings option
  */
-import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -26,7 +26,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     Button logoutBtn;
     ListView deviceList;
     List<UserDeviceStatus> devicesToList;
-    ProgressBar pb;
     ArrayAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +126,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //and runs before doInBackground
         @Override
         protected void onPreExecute() {
-            pb.setVisibility(View.VISIBLE);
+
         }
 
         @Override
@@ -145,7 +144,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                 devicesToList = JsonParser.parseDeviceFeed(s);
                 updateDisplay();
 
-                pb.setVisibility(View.INVISIBLE);
             } catch (Exception e) {
                 e.printStackTrace();
             }

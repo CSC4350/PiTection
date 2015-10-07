@@ -22,8 +22,8 @@ public class JsonParser {
 				User user = new User();
 
 
-				user.setUsername(obj.getString("name"));
-				user.setPassword(obj.getString("city"));
+				user.setUsername(obj.getString("id"));
+				user.setPassword(obj.getString("name"));
 
 
 
@@ -49,7 +49,9 @@ public class JsonParser {
 
 			for (int i = 0; i < ja.length(); i++) {
 				JSONObject obj = ja.getJSONObject(i);
-				UserDeviceStatus devicesListed = new UserDeviceStatus(obj.getString("name"), obj.getString("city"));
+				UserDeviceStatus devicesListed = new UserDeviceStatus();
+
+				devicesListed.setDeviceName(obj.getString("name"));
 
 
 

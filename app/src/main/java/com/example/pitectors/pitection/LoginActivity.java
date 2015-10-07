@@ -30,8 +30,6 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText username, password;
     Button loginBtn, registerBtn;
-    UserLocalStore userLocalStore;
-    ProgressBar pb;
     List<User> userList;
 
     //Test credentials for login
@@ -49,7 +47,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         password = (EditText) findViewById(R.id.passwordField);
 
         loginBtn.setOnClickListener(this);
-        userLocalStore = new UserLocalStore(this);
         registerBtn.setOnClickListener(this);
 
     }
@@ -88,6 +85,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateDisplay() {
+       /* if(userList != null){
+            for(User user: userList){
+                Toast.makeText(this,user.getPassword(),Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+        else{
+            Toast.makeText(this, "I didn't get anything", Toast.LENGTH_SHORT).show();
+        }*/
+        Intent mainScreenIntent = new Intent(this, MainScreen.class);
+
+        startActivity(mainScreenIntent);
+
+    }
+
 
 
 
@@ -103,7 +117,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     requestData("http://jsonplaceholder.typicode.com/users");
                 }
                 else{
-                    Toast.makeText(this,"Network isn't available", LENGTH_SHORT).show();
+                    Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
                 }
                 break;
                   case R.id.registerBtn:
@@ -120,13 +134,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     //Thread pool executer allows multiple tasks in parallel
     private void requestData( String uri) {
-        MyTask task = new MyTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
+         LoginTask lTask = new LoginTask();
+        lTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
     }
 
     //Class to instantiate the Async Task class for running
     //Http Requests in the background
-    private class MyTask extends AsyncTask<String, String, String>{
+    private class LoginTask extends AsyncTask<String, String, String>{
         //This method has access to the main thread
         //and runs before doInBackground
         @Override
@@ -147,7 +161,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             try {
 
                 userList = JsonParser.parseFeed(s);
-                authenticate();
+                updateDisplay();
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -155,25 +170,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         }
-}
-
-    private void authenticate() {
-        for(User user: userList){
-            /*if(  username.getText().toString().equals(user.getUsername()) &&
-                    password.getText().toString().equals(user.getPassword())){
-                Intent intent = new Intent(getApplicationContext(),MainScreen.class);
-                startActivity(intent);
-            }
-            else{
-                Toast.makeText(getApplicationContext(),"Invalid credentials", Toast.LENGTH_SHORT).show();
-            }
-            */
-            Toast.makeText(this,user.getPassword(),Toast.LENGTH_SHORT).show();
-
-        }
-
-
-
     }
 
     }
