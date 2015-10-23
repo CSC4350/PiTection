@@ -15,14 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import android.content.Intent;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.*;
 import android.net.ConnectivityManager;
-
-import java.net.HttpURLConnection;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -33,8 +26,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     List<User> userList;
 
     //Test credentials for login
-    String defaultUser = "Pi";
-    String defaultPassword = "Tection";
+    String validateUser;
+    String validatePassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +38,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginBtn = (Button) findViewById(R.id.loginBtn);
         username = (EditText) findViewById(R.id.usernameField);
         password = (EditText) findViewById(R.id.passwordField);
-
         loginBtn.setOnClickListener(this);
         registerBtn.setOnClickListener(this);
 
@@ -86,19 +78,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void updateDisplay() {
-       /* if(userList != null){
+        //userList is the information returned from the JsonParser
+        //if the list is not empty, use a foreach loop to get the username and password
+        //from the created object(s)
+       if(userList != null){
             for(User user: userList){
-                Toast.makeText(this,user.getPassword(),Toast.LENGTH_SHORT).show();
 
+               validatePassword = user.getPassword();
+                validateUser = user.getUsername();
             }
 
         }
         else{
             Toast.makeText(this, "I didn't get anything", Toast.LENGTH_SHORT).show();
-        }*/
-        Intent mainScreenIntent = new Intent(this, MainScreen.class);
+        }
+        //Validate the login credentials, begin MainScreen activity
+        if(username.getText().toString().equals(validateUser) && password.getText().toString().equals(validatePassword)) {
+            Intent mainScreenIntent = new Intent(this, MainScreen.class);
 
-        startActivity(mainScreenIntent);
+            startActivity(mainScreenIntent);
+        }
+        else{
+            Toast.makeText(this,"Invalid Credentials", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -113,8 +115,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch(v.getId()){
             case R.id.loginBtn:
 
+
                 if(isOnline()){
-                    requestData("http://jsonplaceholder.typicode.com/users");
+                    requestData("http://robertnice.altervista.org/getUserData.php");
                 }
                 else{
                     Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();

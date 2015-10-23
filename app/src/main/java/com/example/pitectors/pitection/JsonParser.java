@@ -9,6 +9,10 @@ import org.json.JSONObject;
 
 /**
  * Created by Rob on 9/27/2015.
+ * The purpose of this class is to provide two methods of parsing JSON data obtained from the background tasks
+ * running from both the Login Activity and the MainScreen activity. Both methods parse the content as JSON arrays
+ * then creates User or Device objects, the objects are then used for validating data or obtaining device information, name and current
+ * status which is updated by the Raspberry Pi.
  */
 public class JsonParser {
 
@@ -22,8 +26,8 @@ public class JsonParser {
 				User user = new User();
 
 
-				user.setUsername(obj.getString("id"));
-				user.setPassword(obj.getString("name"));
+				user.setUsername(obj.getString("username"));
+				user.setPassword(obj.getString("password"));
 
 
 
@@ -40,18 +44,19 @@ public class JsonParser {
 			return null;
 		}
 	}
-
+	//Takes content front background task, parses as JSON data for devices
 	public static  List<UserDeviceStatus> parseDeviceFeed(String content)  {
 		try {
 			JSONArray ja = new JSONArray(content);
-
+			//Creating a list of UserDeviceStatus objects
 			List<UserDeviceStatus> devices = new ArrayList<>();
 
 			for (int i = 0; i < ja.length(); i++) {
 				JSONObject obj = ja.getJSONObject(i);
 				UserDeviceStatus devicesListed = new UserDeviceStatus();
-
-				devicesListed.setDeviceName(obj.getString("name"));
+				//Creating objects from the JSON data posted in the provided URI
+				devicesListed.setDeviceName(obj.getString("device_name"));
+				devicesListed.setStatus(obj.getString("device_status"));
 
 
 

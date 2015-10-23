@@ -38,15 +38,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void updateDisplay() {
-	    if(userList != null){
-		    for(User user: userList){
-			    Toast.makeText(this,user.getPassword(),Toast.LENGTH_SHORT).show();
-		    }
 
-	    }
-	    else{
-		    Toast.makeText(this, "I didn't get anything", Toast.LENGTH_SHORT).show();
-	    }
+			    Toast.makeText(this,"Registration successful",Toast.LENGTH_SHORT).show();
+
+
 
     }
 
@@ -82,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String pass = password.toString();
 
                 if(isOnline()){
-                    requestData("http://jsonplaceholder.typicode.com/users");
+                    requestData("http://robertnice.altervista.org/registerUser.php?username=" + uname + "&password=" + pass);
                 }
                 else{
                     Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
@@ -123,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         protected void onPostExecute(String s) {
 	        try {
 
-		        userList = JsonParser.parseFeed(s);
+		        //userList = JsonParser.parseFeed(s);
 		        updateDisplay();
 
 	        } catch (Exception e) {

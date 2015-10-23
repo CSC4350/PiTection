@@ -43,7 +43,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
 
         if(isOnline()){
-            requestData("http://jsonplaceholder.typicode.com/users");
+            requestData("http://robertnice.altervista.org/getDeviceData.php");
         }
         else{
             Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
@@ -103,6 +103,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             for(UserDeviceStatus devices: devicesToList) {
 
                     deviceNames.add(devices.getDeviceName());
+
 
             }
             adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceNames);

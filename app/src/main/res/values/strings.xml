@@ -20,6 +20,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="logoutButton">Logout</string>
     <string name="registerBtn">Register</string>
+    <string name="armSystem">System</string>
+    <string name="toggleButton">Not Armed</string>
+    <string name="logs">Logs</string>
+    <string name="devicebtntxt">Devices</string>
+
 
 
 </resources>
