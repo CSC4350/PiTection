@@ -24,6 +24,9 @@
     <string name="toggleButton">Not Armed</string>
     <string name="logs">Logs</string>
     <string name="devicebtntxt">Devices</string>
+    <string name="title_device_list">Devices</string>
+    <string name="title_device_detail">Device Detail</string>
+    <string name="title_activity_device">DeviceActivity</string>
 
 
 

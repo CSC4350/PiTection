@@ -22,24 +22,28 @@ import java.util.List;
 
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
-    EditText username, password;
-    Button logoutBtn;
-    ListView deviceList;
-    List<UserDeviceStatus> devicesToList;
-    ArrayAdapter adapter;
+    ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, settingsBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_screen);
 
 
-        //Get buttons and input fields
-        logoutBtn = (Button) findViewById(R.id.logoutBtn);
-       username = (EditText) findViewById(R.id.usernameField);
-       password = (EditText) findViewById(R.id.passwordField);
-       deviceList = (ListView) findViewById(R.id.listView);
+        //Get buttons
+        logoutBtn = (ImageButton) findViewById(R.id.logoutBtn);
+        logsBtn = (ImageButton) findViewById(R.id.logsBtn);
+        deviceBtn = (ImageButton) findViewById(R.id.deviceBtn);
+        armBtn = (ImageButton) findViewById(R.id.armBtn);
+        settingsBtn = (ImageButton) findViewById(R.id.settingsBtn);
+
+
 
         logoutBtn.setOnClickListener(this);
+        logsBtn.setOnClickListener(this);
+        deviceBtn.setOnClickListener(this);
+        armBtn.setOnClickListener(this);
+        settingsBtn.setOnClickListener(this);
 
 
         if(isOnline()){
@@ -82,6 +86,24 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             case R.id.logoutBtn:
                 Intent regIntent = new Intent(this,LoginActivity.class);
                 startActivity(regIntent);
+                break;
+            case R.id.deviceBtn:
+                Intent deviceIntent = new Intent(this,DeviceActivity.class);
+                startActivity(deviceIntent);
+                break;
+            case R.id.armBtn:
+                Toast.makeText(this,"System armed",Toast.LENGTH_SHORT).show();
+                //Do nothing for now
+                break;
+            case R.id.settingsBtn:
+                //eventually start settings Activity
+                Toast.makeText(this,"Starting settings activity",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.logsBtn:
+                //eventually start logs activity
+                Toast.makeText(this,"Starting logs activity",Toast.LENGTH_SHORT).show();
+                break;
+
 
         }
     }
@@ -96,23 +118,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             return false;
         }
     }
-    //Adds items to listView
-    private void updateDisplay() {
-        if(devicesToList != null){
-            ArrayList<String> deviceNames = new ArrayList<>();
-            for(UserDeviceStatus devices: devicesToList) {
 
-                    deviceNames.add(devices.getDeviceName());
-
-
-            }
-            adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceNames);
-            deviceList.setAdapter(adapter);
-        }
-        else{
-            Toast.makeText(this,"Unable to connect to devices", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     //Thread pool executer allows multiple tasks in parallel
     private void requestData( String uri) {
@@ -142,8 +148,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         protected void onPostExecute(String s) {
             try {
 
-                devicesToList = JsonParser.parseDeviceFeed(s);
-                updateDisplay();
 
             } catch (Exception e) {
                 e.printStackTrace();
