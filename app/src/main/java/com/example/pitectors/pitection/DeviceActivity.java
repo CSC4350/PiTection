@@ -20,7 +20,9 @@ public class DeviceActivity extends AppCompatActivity {
 
 	ListView deviceList;
 	List<UserDeviceStatus> devicesToList;
-	ArrayAdapter adapter;
+	DeviceAdapter deviceAdapter;
+
+
 
 
 
@@ -64,15 +66,14 @@ public class DeviceActivity extends AppCompatActivity {
 	//Adds items to listView
 	private void updateDisplay() {
 		if(devicesToList != null){
-			ArrayList<String> deviceNames = new ArrayList<>();
-			for(UserDeviceStatus devices: devicesToList) {
-
-				deviceNames.add(devices.getDeviceName());
-
+			ArrayList<UserDeviceStatus> deviceListView = new ArrayList<>();
+			for(UserDeviceStatus devices: devicesToList){
+				deviceListView.add(devices);
 
 			}
-			adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, deviceNames);
-			deviceList.setAdapter(adapter);
+
+			deviceAdapter = new DeviceAdapter(this, deviceListView);
+			deviceList.setAdapter(deviceAdapter);
 		}
 		else{
 			Toast.makeText(this, "Unable to connect to devices", Toast.LENGTH_SHORT).show();
