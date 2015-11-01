@@ -30,10 +30,6 @@ public class JsonParser {
 				user.setPassword(obj.getString("password"));
 
 
-
-
-
-
 				userList.add(user);
 
 			}

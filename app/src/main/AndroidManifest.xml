@@ -31,6 +31,10 @@
             android:name=".DeviceActivity"
             android:label="@string/title_activity_device" >
         </activity>
+        <activity
+            android:name=".EventLogsActivity"
+            android:label="@string/title_activity_event_logs" >
+        </activity>
     </application>
 
 </manifest>

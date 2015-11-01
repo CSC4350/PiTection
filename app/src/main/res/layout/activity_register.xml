@@ -4,7 +4,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.pitectors.pitection.RegisterActivity">
+    tools:context="com.example.pitectors.pitection.RegisterActivity"
+    android:background="@color/background">
 
     <EditText
         android:layout_width="wrap_content"
@@ -15,7 +16,9 @@
         android:id="@+id/registerUsername"
         android:layout_marginTop="51dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/text"
+        android:gravity="center"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -26,7 +29,10 @@
         android:layout_marginTop="41dp"
         android:layout_below="@+id/registerUsername"
         android:layout_alignLeft="@+id/registerUsername"
-        android:layout_alignStart="@+id/registerUsername" />
+        android:layout_alignStart="@+id/registerUsername"
+        android:textColor="@color/text"
+        android:gravity="center"
+        />
 
     <EditText
         android:layout_width="wrap_content"
@@ -36,7 +42,10 @@
         android:id="@+id/registerConfirm"
         android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/registerUserpass"
-        android:layout_alignStart="@+id/registerUserpass" />
+        android:layout_alignStart="@+id/registerUserpass"
+        android:textColor="@color/text"
+        android:gravity="center"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,7 +54,10 @@
         android:text="@string/registerPassword"
         android:id="@+id/textView3"
         android:layout_below="@+id/registerUserpass"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/text"
+        android:gravity="center"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,7 +66,10 @@
         android:text="@string/registerPasswordConfirm"
         android:id="@+id/textView4"
         android:layout_below="@+id/registerConfirm"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/text"
+        android:gravity="center"
+        />
 
     <Button
         android:layout_width="wrap_content"
@@ -63,13 +78,11 @@
         android:id="@+id/btnRegister"
         android:layout_marginTop="41dp"
         android:layout_below="@+id/textView4"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@color/button"
+        android:textColor="@color/text"
+        />
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_above="@+id/textView4"
-        android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>
