@@ -58,12 +58,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     protected boolean isOnline(){
         ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if(netInfo != null && netInfo.isConnectedOrConnecting()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 /*todo Need to add data validation for user registration, check if user exists, password should be 6-9 characters, make sure passwords match.
  */

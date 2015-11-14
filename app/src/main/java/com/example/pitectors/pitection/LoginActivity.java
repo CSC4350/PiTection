@@ -54,12 +54,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected boolean isOnline(){
         ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if(netInfo != null && netInfo.isConnectedOrConnecting()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     /**Check the network connectivity

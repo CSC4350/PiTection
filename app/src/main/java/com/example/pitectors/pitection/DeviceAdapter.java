@@ -67,11 +67,11 @@ ArrayList<UserDeviceStatus> list;
 
 		viewHolder.text.setText(list.get(position).getDeviceName());
 		if(list.get(position).getStatus().equals(0)){
-			int image_warning = R.mipmap.ic_warning_white_18dp;
+			int image_warning = R.mipmap.ic_event_white_48dp;
 			viewHolder.image.setImageResource(image_warning);
 		}
 		else{
-			int image_ok = R.mipmap.ic_thumb_up_white_18dp;
+			int image_ok = R.mipmap.ic_event_white_48dp;
 			viewHolder.image.setImageResource(image_ok);
 		}
 

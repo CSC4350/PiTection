@@ -6,9 +6,7 @@ package com.example.pitectors.pitection;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,7 +21,8 @@ import java.util.List;
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
     ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, settingsBtn;
-
+    CheckDeviceStatus stat;
+    ArrayList<String> devicesWithProblems;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +45,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         settingsBtn.setOnClickListener(this);
 
 
-        if(isOnline()){
-            requestData("http://robertnice.altervista.org/getDeviceData.php");
-        }
-        else{
-            Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
-        }
+
+
+
 
 
 
@@ -92,8 +88,18 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                 startActivity(deviceIntent);
                 break;
             case R.id.armBtn:
-                Toast.makeText(this,"System armed",Toast.LENGTH_SHORT).show();
-                //Do nothing for now
+                stat = new CheckDeviceStatus();
+                devicesWithProblems = new ArrayList<>();
+                devicesWithProblems = stat.getCurrentStatus();
+
+                if(devicesWithProblems.isEmpty()){
+                    Toast.makeText(this, "System is armed", Toast.LENGTH_SHORT).show();
+                }
+                else if(!devicesWithProblems.isEmpty()){
+                    for(String devices: devicesWithProblems) {
+                        Toast.makeText(this, "Please check: " + devices + "\n", Toast.LENGTH_SHORT).show();
+                    }
+                }
                 break;
             case R.id.settingsBtn:
                 //eventually start settings Activity
@@ -107,55 +113,24 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
         }
     }
-    //Checks network connectivity
-    protected boolean isOnline(){
-        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if(netInfo != null && netInfo.isConnectedOrConnecting()){
-            return true;
+
+    public  void systemArming(ArrayList<String> deviceList) {
+        //get the app's context through the context class created for static methods/classes
+        Context context = ContextClass.getContext();
+
+        //If the returned array is not empty, then a device with a problem was found
+        //alert user of issue, else notify user that system is armed
+        if (!deviceList.isEmpty()) {
+            for (String device : deviceList) {
+                Toast.makeText(context , "Please check " + device + "for any problems", Toast.LENGTH_SHORT).show();
+            }
         }
         else{
-            return false;
+            Toast.makeText(context,"System is armed", Toast.LENGTH_SHORT);
         }
     }
 
 
-    //Thread pool executer allows multiple tasks in parallel
-    private void requestData( String uri) {
-        MyTask task = new MyTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
-    }
-
-    //Class to instantiate the Async Task class for running
-    //Http Requests in the background
-    private class MyTask extends AsyncTask<String, String, String>{
-        //This method has access to the main thread
-        //and runs before doInBackground
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String content = HttpManager.getData(params[0]);
-            return content;
-        }
-
-        //This method receives a result, depending
-        //on the AsyncTask<> data parameter type
-        @Override
-        protected void onPostExecute(String s) {
-            try {
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-        }
-    }
 
 
 }

@@ -27,7 +27,7 @@
         android:layout_height="25dp"
         android:id="@+id/deviceImage"
         android:layout_marginTop="25dp"
-        android:src="@mipmap/ic_warning_white_18dp"
+        android:src="@mipmap/ic_event_white_48dp"
         android:layout_alignTop="@+id/deviceName"
         android:layout_toRightOf="@+id/deviceName"
         android:layout_toEndOf="@+id/deviceName"/>
