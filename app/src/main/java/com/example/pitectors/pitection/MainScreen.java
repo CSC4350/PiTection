@@ -161,6 +161,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         @Override
         protected void onPostExecute(String s) {
             try {
+
                 devicesToList = new ArrayList();
                 devicesToList = JsonParser.parseDeviceFeed(s);
                 updateArmProgress();
