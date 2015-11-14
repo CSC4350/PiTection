@@ -15,27 +15,22 @@ import java.util.List;
  * are currently opened. This will be used to notify the user when trying to arm the system if
  * there are any device(s) that needs attention and alert the user of any problems when the system is armed.
  */
-public class CheckDeviceStatus extends AppCompatActivity {
-    List<UserDeviceStatus> devicesToList;
-    ArrayList<String> openedDevices;
-    public  ArrayList<String> getCurrentStatus() {
-        //get the app's context through the context class created for static methods/classes
-        try {
-            if (isOnline()) {
-                requestData("http://robertnice.altervista.org/getDeviceData.php");
-                //Call method to check each device and display which ones have problems if any
+public class CheckDeviceStatus {
 
-            } else {
-                Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
-            }
+    ArrayList<String> openedDevices;
+    public  ArrayList<String> getCurrentStatus(List<UserDeviceStatus> devicesToList) {
+        try {
+            //Create a new arraylist to hold device(s) of status 0, opened
+            openedDevices = new ArrayList<>();
+
             //Loop through the current devices, add them to openedDevices array if
             //any are status 0
             for (UserDeviceStatus device : devicesToList) {
-                if (device.getStatus() == "1") {
+                if (device.getStatus().equals("1")) {
                     openedDevices.add(device.getDeviceName());
+
                 }
-                //Create a new arraylist to hold device(s) of status 0, opened
-                openedDevices = new ArrayList<>();
+
             }
         }
             catch(Exception ex){
@@ -52,49 +47,6 @@ public class CheckDeviceStatus extends AppCompatActivity {
 
     }
 
-    //Checks network connectivity
-    protected boolean isOnline(){
-        ConnectivityManager cm = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
 
-
-    //Thread pool executer allows multiple tasks in parallel
-    private void requestData( String uri) {
-        MyTask task = new MyTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
-    }
-
-    //Class to instantiate the Async Task class for running
-    //Http Requests in the background
-    private class MyTask extends AsyncTask<String, String, String>{
-        //This method has access to the main thread
-        //and runs before doInBackground
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            String content = HttpManager.getData(params[0]);
-            return content;
-        }
-
-        //This method receives a result, depending
-        //on the AsyncTask<> data parameter type
-        @Override
-        protected void onPostExecute(String s) {
-            try {
-                devicesToList = new ArrayList();
-                devicesToList = JsonParser.parseDeviceFeed(s);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
-        }
-    }
 
 }

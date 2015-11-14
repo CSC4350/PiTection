@@ -22,5 +22,5 @@
         android:layout_toEndOf="@+id/textView"
         android:layout_marginLeft="61dp"
         android:layout_marginStart="61dp"
-        android:src="@mipmap/ic_speaker_notes_white_24dp" />
+        android:src="@mipmap/ic_event_white_48dp" />
 </RelativeLayout>

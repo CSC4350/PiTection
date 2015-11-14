@@ -112,8 +112,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.loginBtn:
+                Intent mainScreenIntent = new Intent(this, MainScreen.class);
 
-
+                startActivity(mainScreenIntent);
+                /**
                 if(isOnline()){
                     requestData("http://robertnice.altervista.org/getUserData.php");
                 }
@@ -128,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             default:
                 Toast.makeText(getApplicationContext(), "Invalid credentials", LENGTH_SHORT).show();
 
-
+                 */
         }
 
     }
