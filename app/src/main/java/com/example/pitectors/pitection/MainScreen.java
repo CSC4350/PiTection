@@ -27,6 +27,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     CheckDeviceStatus stat;
     ArrayList<String> devicesWithProblems;
     List<UserDeviceStatus> devicesToList;
+    CheckDeviceService checkDeviceService;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         armBtn.setOnClickListener(this);
         settingsBtn.setOnClickListener(this);
 
+        intent = new Intent(this, CheckDeviceService.class);
 
 
 
@@ -179,12 +182,15 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             devicesWithProblems = new ArrayList<>();
            devicesWithProblems = checkStatus.getCurrentStatus(devicesToList);
             if(devicesWithProblems != null){
-                for(String items: devicesWithProblems) {
-                    Toast.makeText(this, "Please check " + items + " for any problems", Toast.LENGTH_LONG).show();
-                }
+                //for(String items: devicesWithProblems) {
+                   // Toast.makeText(this, "Please check " + items + " for any problems", Toast.LENGTH_LONG).show();
+              //  }
+                Toast.makeText(this , "Starting service", Toast.LENGTH_SHORT).show();
+                checkDeviceService = new CheckDeviceService();
+                checkDeviceService.startService(intent);
             }
             else{
-                Toast.makeText(this , "System Armed", Toast.LENGTH_LONG).show();
+
             }
         } else{
             Toast.makeText(this , "No devices to check", Toast.LENGTH_SHORT).show();
