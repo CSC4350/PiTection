@@ -108,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         //This method receives a result, depending
-        //on the AsyncTask<> data parameter type
+        //on the RunTasks<> data parameter type
         @Override
         protected void onPostExecute(String s) {
 	        try {

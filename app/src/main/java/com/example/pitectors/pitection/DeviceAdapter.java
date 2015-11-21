@@ -17,10 +17,10 @@ import java.util.ArrayList;
  * Created by Rob on 10/28/2015.
  */
 public class DeviceAdapter extends BaseAdapter {
-ArrayList<UserDeviceStatus> list;
+ArrayList<Devices> list;
 	private Activity context1;
 
-	public DeviceAdapter(Activity context, ArrayList<UserDeviceStatus> items)
+	public DeviceAdapter(Activity context, ArrayList<Devices> items)
 	{
 		context1 = context;
 		this.list = items;
@@ -66,7 +66,11 @@ ArrayList<UserDeviceStatus> list;
 		}
 
 		viewHolder.text.setText(list.get(position).getDeviceName());
-		if(list.get(position).getStatus().equals(0)){
+		if(list.get(position).getDeviceStatus().equals(0) && list.get(position).getDeviceType().equals("Door")){
+			int image_warning = R.mipmap.ic_event_white_48dp;
+			viewHolder.image.setImageResource(image_warning);
+		}
+		else if(list.get(position).getDeviceStatus().equals(1) && list.get(position).getDeviceType().equals("Motion")){
 			int image_warning = R.mipmap.ic_event_white_48dp;
 			viewHolder.image.setImageResource(image_warning);
 		}

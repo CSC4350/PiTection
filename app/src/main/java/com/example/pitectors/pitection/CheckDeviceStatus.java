@@ -12,23 +12,30 @@ import java.util.List;
 /**
  * Created by rnice01 on 11/7/2015.
  * The intent for this class is to get the current status for devices when called and return which device(s)
- * are currently opened. This will be used to notify the user when trying to arm the system if
+ * are currently opened. When looping through the Device list, checks need to be made for the device type and the status
+ * The motion detectors will change to a status of 1 when motion is detected and doors switch to status 0 when
+ * the contacts are broken.
+ * This will be used to notify the user when trying to arm the system if
  * there are any device(s) that needs attention and alert the user of any problems when the system is armed.
  */
 public class CheckDeviceStatus {
 
     ArrayList<String> openedDevices;
-    public  ArrayList<String> getCurrentStatus(List<UserDeviceStatus> devicesToList) {
+    public  ArrayList<String> getCurrentStatus(List<Devices> devicesToList) {
         try {
-            //Create a new arraylist to hold device(s) of status 0, opened
+            //Create a new arraylist to hold device(s) of status 0, opened for doors
+            //status 1 for motion detectors
             openedDevices = new ArrayList<>();
 
-            //Loop through the current devices, add them to openedDevices array if
-            //any are status 0
-            for (UserDeviceStatus device : devicesToList) {
-                if (device.getStatus().equals("1")) {
+            //Loop through the current devices, add them to openedDevices arraylist if
+            //any are status 0 for doors or status 1 for motion detectors
+            for (Devices device : devicesToList) {
+                if (device.getDeviceType().equals("Door") && device.getDeviceStatus().equals("0")) {
                     openedDevices.add(device.getDeviceName());
 
+                }
+                else if(device.getDeviceType().equals("Motion") && device.getDeviceStatus().equals("1")){
+                    openedDevices.add(device.getDeviceName());
                 }
 
             }

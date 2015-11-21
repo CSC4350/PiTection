@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         //This method receives a result, depending
-        //on the AsyncTask<> data parameter type
+        //on the RunTasks<> data parameter type
         @Override
         protected void onPostExecute(String s) {
             try {

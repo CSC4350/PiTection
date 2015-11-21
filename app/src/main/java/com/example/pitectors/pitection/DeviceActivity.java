@@ -19,7 +19,7 @@ import java.util.List;
 public class DeviceActivity extends AppCompatActivity {
 
 	ListView deviceList;
-	List<UserDeviceStatus> devicesToList;
+	List<Devices> devicesToList;
 	DeviceAdapter deviceAdapter;
 
 
@@ -66,8 +66,8 @@ public class DeviceActivity extends AppCompatActivity {
 	//Adds items to listView
 	private void updateDisplay() {
 		if(devicesToList != null){
-			ArrayList<UserDeviceStatus> deviceListView = new ArrayList<>();
-			for(UserDeviceStatus devices: devicesToList){
+			ArrayList<Devices> deviceListView = new ArrayList<>();
+			for(Devices devices: devicesToList){
 				deviceListView.add(devices);
 
 			}
@@ -116,7 +116,7 @@ public class DeviceActivity extends AppCompatActivity {
 		}
 
 		//This method receives a result, depending
-		//on the AsyncTask<> data parameter type
+		//on the RunTasks<> data parameter type
 		@Override
 		protected void onPostExecute(String s) {
 			try {

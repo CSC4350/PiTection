@@ -41,18 +41,20 @@ public class JsonParser {
 		}
 	}
 	//Takes content front background task, parses as JSON data for devices
-	public static  List<UserDeviceStatus> parseDeviceFeed(String content)  {
+	public static  List<Devices> parseDeviceFeed(String content)  {
 		try {
 			JSONArray ja = new JSONArray(content);
 			//Creating a list of UserDeviceStatus objects
-			List<UserDeviceStatus> devices = new ArrayList<>();
+			List<Devices> devices = new ArrayList<>();
 
 			for (int i = 0; i < ja.length(); i++) {
 				JSONObject obj = ja.getJSONObject(i);
-				UserDeviceStatus devicesListed = new UserDeviceStatus();
+				Devices devicesListed = new Devices();
 				//Creating objects from the JSON data posted in the provided URI
 				devicesListed.setDeviceName(obj.getString("device_name"));
-				devicesListed.setStatus(obj.getString("device_status"));
+				devicesListed.setDeviceStatus(obj.getString("device_status"));
+				devicesListed.setDeviceType(obj.getString("device_type"));
+
 
 
 
