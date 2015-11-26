@@ -66,6 +66,9 @@ ArrayList<Devices> list;
 		}
 
 		viewHolder.text.setText(list.get(position).getDeviceName());
+		/**Some checks on the status of each device
+		 * set a specific icon for the different statuses
+		 */
 		if(list.get(position).getDeviceStatus().equals(0) && list.get(position).getDeviceType().equals("Door")){
 			int image_warning = R.mipmap.ic_event_white_48dp;
 			viewHolder.image.setImageResource(image_warning);

@@ -69,4 +69,43 @@ public class JsonParser {
 		}
 	}
 
+	public static List<Events> parseEventFeed(String content) {
+		try {
+			JSONArray ja = new JSONArray(content);
+
+			//Creating a list of Event objects
+			List<Events> events = new ArrayList<>();
+
+			for (int i = 0; i < ja.length(); i++) {
+				JSONObject obj = ja.getJSONObject(i);
+				Events eventList = new Events();
+				//Creating objects from the JSON data posted in the provided URI
+				eventList.setEventDevice(obj.getString("device_name"));
+				eventList.setEventDate(obj.getString("event_date"));
+				eventList.setUser(obj.getString("user"));
+				//Check the the status and the device type and set the
+				//event status accordingly
+				if(obj.getString("event_status").equals("0") && obj.getString("device_type").equals("Door")){
+					eventList.setEventStatus("Door opened");
+				}
+				else if(obj.getString("event_status").equals("1") && obj.getString("device_type").equals("Motion Sensor")) {
+					eventList.setEventStatus("Motion detected");
+				}
+				else if(obj.getString("event_status").equals("1") && obj.getString("device_type").equals("Door")){
+					eventList.setEventStatus("Door closed");
+				}
+
+
+
+
+
+
+				events.add(eventList);
+			}
+			return events;
+		}catch(JSONException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

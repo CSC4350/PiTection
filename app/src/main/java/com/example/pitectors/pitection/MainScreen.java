@@ -114,8 +114,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                 Toast.makeText(this,"Starting settings activity",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.logsBtn:
-                //eventually start logs activity
-                Toast.makeText(this,"Starting logs activity",Toast.LENGTH_SHORT).show();
+                //Build intent to start the logs activity on button action
+                Intent logsIntent = new Intent(this,EventLogsActivity.class);
+                startActivity(logsIntent);
                 break;
 
 
