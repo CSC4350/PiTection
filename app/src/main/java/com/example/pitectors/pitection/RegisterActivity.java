@@ -71,8 +71,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String uname = username.toString();
                 String pass = password.toString();
 
+                Encrypt encrypt = new Encrypt();
+                String password = pass;
+                encrypt.setPassword(password);
+                encrypt.encryptPassword();
+
+
                 if(isOnline()){
-                    requestData("http://robertnice.altervista.org/registerUser.php?username=" + uname + "&password=" + pass);
+                    requestData("http://robertnice.altervista.org/pitected_registration.php?username=" + uname + "&password=" + encrypt.getGeneratedPassword());
                 }
                 else{
                     Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
@@ -80,9 +86,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-
-
-                //User user = new User(uname, pass);
         }
     }
     //Thread pool executer allows multiple tasks in parallel

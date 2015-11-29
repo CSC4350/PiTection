@@ -69,11 +69,7 @@ ArrayList<Devices> list;
 		/**Some checks on the status of each device
 		 * set a specific icon for the different statuses
 		 */
-		if(list.get(position).getDeviceStatus().equals(0) && list.get(position).getDeviceType().equals("Door")){
-			int image_warning = R.mipmap.ic_event_white_48dp;
-			viewHolder.image.setImageResource(image_warning);
-		}
-		else if(list.get(position).getDeviceStatus().equals(1) && list.get(position).getDeviceType().equals("Motion")){
+		if(list.get(position).getDeviceStatus().equals(1)){
 			int image_warning = R.mipmap.ic_event_white_48dp;
 			viewHolder.image.setImageResource(image_warning);
 		}

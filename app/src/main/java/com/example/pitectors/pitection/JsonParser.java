@@ -1,5 +1,7 @@
 package com.example.pitectors.pitection;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,32 +18,30 @@ import org.json.JSONObject;
  */
 public class JsonParser {
 
-	public static  List<User> parseFeed(String content)  {
+	public static User parseFeed(String content) {
 		try {
 			JSONArray ja = new JSONArray(content);
-			List<User> userList = new ArrayList<>();
-
+			User user = new User();
 			for (int i = 0; i < ja.length(); i++) {
 				JSONObject obj = ja.getJSONObject(i);
-				User user = new User();
 
 
+				user.setUserID(obj.getString("id"));
 				user.setUsername(obj.getString("username"));
 				user.setPassword(obj.getString("password"));
 
-
-				userList.add(user);
-
 			}
-			return userList;
 
-		}catch(JSONException e){
+			return user;
+
+		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+
 	//Takes content front background task, parses as JSON data for devices
-	public static  List<Devices> parseDeviceFeed(String content)  {
+	public static List<Devices> parseDeviceFeed(String content) {
 		try {
 			JSONArray ja = new JSONArray(content);
 			//Creating a list of UserDeviceStatus objects
@@ -51,19 +51,15 @@ public class JsonParser {
 				JSONObject obj = ja.getJSONObject(i);
 				Devices devicesListed = new Devices();
 				//Creating objects from the JSON data posted in the provided URI
-				devicesListed.setDeviceName(obj.getString("device_name"));
-				devicesListed.setDeviceStatus(obj.getString("device_status"));
-				devicesListed.setDeviceType(obj.getString("device_type"));
-
-
-
+				devicesListed.setDeviceName(obj.getString("name"));
+				devicesListed.setDeviceStatus(obj.getString("status"));
 
 
 
 				devices.add(devicesListed);
 			}
 			return devices;
-		}catch(JSONException e){
+		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -80,32 +76,34 @@ public class JsonParser {
 				JSONObject obj = ja.getJSONObject(i);
 				Events eventList = new Events();
 				//Creating objects from the JSON data posted in the provided URI
-				eventList.setEventDevice(obj.getString("device_name"));
-				eventList.setEventDate(obj.getString("event_date"));
-				eventList.setUser(obj.getString("user"));
+				eventList.setEventDevice(obj.getString("username"));
+				eventList.setEventDate(obj.getString("timestamp"));
+				eventList.setUser(obj.getString("username"));
+				eventList.setEventStatus(obj.getString("status"));
 				//Check the the status and the device type and set the
 				//event status accordingly
-				if(obj.getString("event_status").equals("0") && obj.getString("device_type").equals("Door")){
-					eventList.setEventStatus("Door opened");
-				}
-				else if(obj.getString("event_status").equals("1") && obj.getString("device_type").equals("Motion Sensor")) {
-					eventList.setEventStatus("Motion detected");
-				}
-				else if(obj.getString("event_status").equals("1") && obj.getString("device_type").equals("Door")){
-					eventList.setEventStatus("Door closed");
-				}
-
-
-
-
 
 
 				events.add(eventList);
 			}
 			return events;
-		}catch(JSONException e){
+		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static String parseSystemFeed(String s) throws JSONException {
+		JSONArray ja = new JSONArray(s);
+
+		String status = "";
+
+		for (int i = 0; i < ja.length(); i++) {
+			JSONObject obj = ja.getJSONObject(i);
+			Events eventList = new Events();
+			//Creating objects from the JSON data posted in the provided URI
+			status = obj.getString("status");
+		}
+		return status;
 	}
 }

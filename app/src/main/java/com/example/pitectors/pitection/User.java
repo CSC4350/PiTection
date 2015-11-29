@@ -4,11 +4,12 @@ package com.example.pitectors.pitection;
  * Created by Rob on 9/20/2015.
  */
 public class User {
-    String username, password;
+    String username, password, userID;
 
-    public User (String username, String userpass){
+    public User (String username, String userpass, String userID){
         this.username = username;
         this.password = userpass;
+        this.userID = userID;
 
     }
 
@@ -32,5 +33,9 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void setUserID(String userID){this.userID = userID;}
+
+    public String getUserID(){return userID;}
 }
 

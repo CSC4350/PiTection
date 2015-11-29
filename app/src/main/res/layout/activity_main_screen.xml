@@ -227,6 +227,24 @@
                 android:layout_column="0"
                 android:onClick="startService"
                 android:visibility="invisible" />
+            <Button
+                android:background="@color/misc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/startSystemService"
+                android:layout_column="0"
+                android:onClick="startSystemService"
+                android:visibility="gone" />
+            <Button
+                android:background="@color/misc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:id="@+id/stopSystemService"
+                android:layout_column="0"
+                android:onClick="stopSystemService"
+                android:visibility="gone" />
 
         </TableRow>
 

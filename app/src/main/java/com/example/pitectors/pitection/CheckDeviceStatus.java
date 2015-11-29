@@ -30,14 +30,10 @@ public class CheckDeviceStatus {
             //Loop through the current devices, add them to openedDevices arraylist if
             //any are status 0 for doors or status 1 for motion detectors
             for (Devices device : devicesToList) {
-                if (device.getDeviceType().equals("Door") && device.getDeviceStatus().equals("0")) {
+                if (device.getDeviceStatus().equals("1")) {
                     openedDevices.add(device.getDeviceName());
 
                 }
-                else if(device.getDeviceType().equals("Motion") && device.getDeviceStatus().equals("1")){
-                    openedDevices.add(device.getDeviceName());
-                }
-
             }
         }
             catch(Exception ex){

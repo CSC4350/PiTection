@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class EventLogAdapter extends BaseAdapter {
     ArrayList<Events> list;
     private Activity context1;
+    ViewHolder viewHolder;
 
     public EventLogAdapter(Activity context, ArrayList<Events> items)
     {
@@ -40,12 +41,14 @@ public class EventLogAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
 
         if(convertView == null){
-            convertView = LayoutInflater.from(context1).inflate(R.layout.device_layout, null);
+            convertView = LayoutInflater.from(context1).inflate(R.layout.events_layout, null);
             viewHolder = new ViewHolder();
             viewHolder.text = (TextView) convertView.findViewById(R.id.deviceName);
+            viewHolder.text = (TextView) convertView.findViewById(R.id.deviceStatus);
+            viewHolder.text = (TextView) convertView.findViewById(R.id.user);
+            viewHolder.text = (TextView) convertView.findViewById(R.id.date);
             /**When the List View is first created, create a row with the custom layout
              * instance and store it to later add texts and images
              */
@@ -61,6 +64,10 @@ public class EventLogAdapter extends BaseAdapter {
         }
 
         viewHolder.text.setText(list.get(position).getEventDevice());
+        viewHolder.text.setText(list.get(position).getEventStatus());
+        viewHolder.text.setText(list.get(position).getUser());
+        viewHolder.text.setText(list.get(position).getEventDate());
+
 
 
         return convertView;

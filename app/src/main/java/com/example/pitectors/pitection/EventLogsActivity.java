@@ -25,7 +25,7 @@ public class EventLogsActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_event_logs);
 
 		if(isOnline()){
-			requestData("http://robertnice.altervista.org/getDeviceData.php");
+			requestData("http://robertnice.altervista.org/pitection_logs.php");
 		}
 		else{
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();

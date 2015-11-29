@@ -24,7 +24,7 @@ import java.util.List;
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
     ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, settingsBtn, disarmBtn;
-    Button btnConfirm;
+    Button btnConfirm,btnStartSystemService,btnStopSystemService;
     TextView armText;
     CheckDeviceStatus stat;
     ArrayList<String> devicesWithProblems;
@@ -45,6 +45,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         armBtn = (ImageButton) findViewById(R.id.armBtn);
         settingsBtn = (ImageButton) findViewById(R.id.settingsBtn);
         btnConfirm = (Button) findViewById(R.id.btnConfirm);
+        btnStartSystemService= (Button) findViewById(R.id.startSystemService);
+        btnStopSystemService = (Button) findViewById(R.id.stopSystemService);
 
 
         disarmBtn = (ImageButton) findViewById(R.id.disarmBtn);
@@ -56,8 +58,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
         armText = (TextView) findViewById(R.id.armTxt);
 
-
-
+        //Start checking the system for anyone other than current user arming system
+        btnStartSystemService.performClick();
 
 
 
@@ -210,16 +212,57 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
        btnConfirm.setVisibility(View.GONE);
         disarmBtn.setVisibility(View.VISIBLE);
         armText.setText("Disarm System");
+        //Update the database system_log table to show system is armed
+        //by the current logged in user, notify user with Toast
+        //and begin the service to check the devices every 5 seconds for
+        //status changes
 
-        Toast.makeText(this,"System is armed", Toast.LENGTH_LONG).show();
+        //Get the ID for the current user
+        LoginActivity login = new LoginActivity();
+       String userID = login.returnedUser.getUserID().toString();
+        if (isOnline()) {
+            requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=1&user_id=" + userID);
+            Toast.makeText(this,"System is armed", Toast.LENGTH_LONG).show();
+            startService(new Intent(getBaseContext(), CheckDeviceService.class));
+        } else {
+            Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
+        }
 
-        startService(new Intent(getBaseContext(), CheckDeviceService.class));
+
+
     }
 
     public void stopService(View view){
         disarmBtn.setVisibility(View.GONE);
         armBtn.setVisibility(View.VISIBLE);
         armText.setText("Arm System");
+
+        //Get the ID for the current user
+        //Update the System log in the database
+        LoginActivity login = new LoginActivity();
+        String userID = login.returnedUser.getUserID().toString();
+        if (isOnline()) {
+            requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=0&user_id=" + userID);
+            Toast.makeText(this,"System is armed", Toast.LENGTH_LONG).show();
+            startService(new Intent(getBaseContext(), CheckDeviceService.class));
+        } else {
+            Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
+        }
+
+        stopService(new Intent(getBaseContext(), CheckDeviceService.class));
+        //Begin service to check for system being armed
+        btnStartSystemService.performClick();
+    }
+
+
+    public void startSystemService(View view){
+
+
+        startService(new Intent(getBaseContext(), CheckSystemService.class));
+    }
+
+    public void stopSystemService(View view){
+
 
         stopService(new Intent(getBaseContext(), CheckDeviceService.class));
     }
