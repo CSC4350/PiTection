@@ -221,10 +221,10 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
        btnConfirm.setVisibility(View.GONE);
         disarmBtn.setVisibility(View.VISIBLE);
         armText.setText("Disarm System");
-        //Update the database system_log table to show system is armed
-        //by the current logged in user, notify user with Toast
-        //and begin the service to check the devices every 5 seconds for
-        //status changes
+
+        //Stop the system checking service once the system is armed
+        //to then begin the service to check the devices
+        btnStopSystemService.performClick();
 
         //Get the ID for the current user
         //From the static variable in the JsonParser
@@ -268,6 +268,19 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
     }
 
+    //Method to access the perform button click
+    //method on the invisible button in the main
+    //screen layout that invokes the stopSystemService
+    //method to stop the service
+    public void performStopSystemService(){
+        btnStopSystemService.performClick();
+        //Only reason for this method to be called
+        //is if the system is armed manually out of the app
+        //so invoke the startService method
+        //that btnConfirm onClick property is tied to
+        //this will indicate on the app that the system is armed
+        btnConfirm.performClick();
+    }
 
     public void startSystemService(View view){
 

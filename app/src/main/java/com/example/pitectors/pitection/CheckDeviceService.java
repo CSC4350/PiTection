@@ -123,7 +123,8 @@ public class CheckDeviceService extends Service {
             //notification is sent if the arraylist returned is not empty
         if(userList != null) {
           devicesChecked = new ArrayList<>();
-            devicesChecked = deviceStatus.getCurrentStatus(userList);
+            deviceStatus = new CheckDeviceStatus();
+            devicesChecked.addAll(deviceStatus.getCurrentStatus(userList));
             if (!devicesChecked.isEmpty()) {
 
                 //Stop the service once a problem is found, otherwise

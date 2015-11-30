@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.List;
@@ -118,8 +119,9 @@ public class CheckSystemService extends Service {
         //If the system has been armed, stop the service
         if(status.equals("1")){
         MainScreen main = new MainScreen();
-           main.btnStopSystemService.performClick();
-            main.btnConfirm.performClick();
+
+            //Stop the service to check the system
+           main.performStopSystemService();
         }
 
 
