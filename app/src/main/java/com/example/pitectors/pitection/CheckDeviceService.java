@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +25,7 @@ public class CheckDeviceService extends Service {
     Context context;
     List<Devices> deviceList;
     CheckDeviceStatus deviceStatus;
+    ArrayList<String> devicesChecked;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -119,7 +121,10 @@ public class CheckDeviceService extends Service {
             //Use the CheckDeviceStatus method to check
             //for any problems with doors or motion detectors
             //notification is sent if the arraylist returned is not empty
-            if (!deviceStatus.getCurrentStatus(userList).isEmpty()) {
+        if(userList != null) {
+          devicesChecked = new ArrayList<>();
+            devicesChecked = deviceStatus.getCurrentStatus(userList);
+            if (!devicesChecked.isEmpty()) {
 
                 //Stop the service once a problem is found, otherwise
                 //notifications will continue popping
@@ -133,7 +138,7 @@ public class CheckDeviceService extends Service {
                 PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
 
                 //Build notification to alert the user of a disturbance
-                Notification n  = new Notification.Builder(this)
+                Notification n = new Notification.Builder(this)
                         .setContentTitle("Detected disturbance at your home!")
                         .setContentText("Subject")
                         .setSmallIcon(R.mipmap.ic_event_white_48dp)
@@ -148,7 +153,10 @@ public class CheckDeviceService extends Service {
                 notificationManager.notify(0, n);
 
             }
-
+        }
+        else{
+            Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
+        }
 
     }
 }

@@ -87,7 +87,7 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Event Logs"
+                android:text="Device Logs"
                 android:id="@+id/logsTxt"
                 android:textColor="@color/text"
                 android:textAlignment="center"
@@ -105,7 +105,7 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/settingsBtn"
+                android:id="@+id/systemLogBtn"
                 android:background="@color/button"
                 android:layout_weight="1"
                 android:layout_width="0dip"
@@ -128,7 +128,7 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Settings"
+                android:text="System Logs"
                 android:id="@+id/settingsTxt"
                 android:textColor="@color/text"
                 android:textStyle="bold"
@@ -226,7 +226,7 @@
                 android:id="@+id/btnConfirm"
                 android:layout_column="0"
                 android:onClick="startService"
-                android:visibility="invisible" />
+                android:visibility="gone" />
             <Button
                 android:background="@color/misc"
                 android:layout_width="wrap_content"

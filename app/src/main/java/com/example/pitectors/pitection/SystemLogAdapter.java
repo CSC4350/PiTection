@@ -7,17 +7,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
  * Created by rnice01 on 11/23/2015.
  */
-public class EventLogAdapter extends BaseAdapter {
-    ArrayList<Events> list;
+public class SystemLogAdapter extends BaseAdapter {
+    ArrayList<SystemLog> list;
     private Activity context1;
     ViewHolder viewHolder;
 
-    public EventLogAdapter(Activity context, ArrayList<Events> items)
+    public SystemLogAdapter(Activity context, ArrayList<SystemLog> items)
     {
         context1 = context;
         this.list = items;
@@ -43,11 +45,12 @@ public class EventLogAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if(convertView == null){
-            convertView = LayoutInflater.from(context1).inflate(R.layout.events_layout, null);
+            convertView = LayoutInflater.from(context1).inflate(R.layout.system_log_layout, null);
             viewHolder = new ViewHolder();
-            viewHolder.name = (TextView) convertView.findViewById(R.id.device_name);
-            viewHolder.status = (TextView) convertView.findViewById(R.id.device_status);
-            viewHolder.timestamp = (TextView) convertView.findViewById(R.id.device_timestamp);
+            viewHolder.status = (TextView) convertView.findViewById(R.id.system_status);
+            viewHolder.username = (TextView) convertView.findViewById(R.id.username);
+            viewHolder.timestamp = (TextView) convertView.findViewById(R.id.system_timestamp);
+
             /**When the List View is first created, create a row with the custom layout
              * instance and store it to later add texts and images
              */
@@ -62,14 +65,15 @@ public class EventLogAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.name.setText(list.get(position).getEventDevice());
-        if(list.get(position).getEventStatus().equals("1")){
-            viewHolder.status.setText("Opened/Motion Detected");
+
+        if(list.get(position).getStatus().equals("0")){
+            viewHolder.status.setText("Disarmed system at");
         }
-        else if(list.get(position).getEventStatus().equals("0")){
-            viewHolder.status.setText("Closed/No Motion Detected");
+        else if(list.get(position).getStatus().equals("1")){
+            viewHolder.status.setText("Armed system at");
         }
-        viewHolder.timestamp.setText(list.get(position).getEventDate());
+        viewHolder.username.setText("By: " + list.get(position).getUsername());
+        viewHolder.timestamp.setText(list.get(position).getTimeStamp());
 
 
 
@@ -77,8 +81,8 @@ public class EventLogAdapter extends BaseAdapter {
     }
 
     public class ViewHolder{
-        public TextView name;
-        public TextView status;
+        public TextView username;
         public TextView timestamp;
+        public TextView status;
     }
 }

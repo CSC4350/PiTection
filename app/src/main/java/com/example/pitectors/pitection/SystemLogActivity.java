@@ -4,8 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -14,10 +14,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventLogsActivity extends AppCompatActivity {
+public class SystemLogActivity extends AppCompatActivity {
 	ListView eventList;
-	List<Events> eventsToList;
-	EventLogAdapter eventAdapter;
+	List<SystemLog> eventsToList;
+	SystemLogAdapter adapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class EventLogsActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_event_logs);
 
 		if(isOnline()){
-			requestData("http://robertnice.altervista.org/device_log.php");
+			requestData("http://robertnice.altervista.org/System_log.php");
 		}
 		else{
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
@@ -59,14 +59,14 @@ public class EventLogsActivity extends AppCompatActivity {
 	//Adds items to listView
 	private void updateDisplay() {
 		if(eventsToList != null){
-			ArrayList<Events> deviceListView = new ArrayList<>();
-			for(Events devices: eventsToList){
-				deviceListView.add(devices);
+			ArrayList<SystemLog> deviceListView = new ArrayList<>();
+			for(SystemLog logs: eventsToList){
+				deviceListView.add(logs);
 
 			}
 
-			eventAdapter = new EventLogAdapter(this, deviceListView);
-			eventList.setAdapter(eventAdapter);
+			adapter = new SystemLogAdapter(this, deviceListView);
+			eventList.setAdapter(adapter);
 		}
 		else{
 			Toast.makeText(this, "Unable to connect to devices", Toast.LENGTH_SHORT).show();
@@ -114,7 +114,7 @@ public class EventLogsActivity extends AppCompatActivity {
 		protected void onPostExecute(String s) {
 			try {
 
-				eventsToList = JsonParser.parseEventFeed(s);
+				eventsToList = JsonParser.parseSystemLogs(s);
 				updateDisplay();
 
 			} catch (Exception e) {

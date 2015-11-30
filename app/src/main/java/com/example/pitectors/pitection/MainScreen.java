@@ -23,7 +23,7 @@ import java.util.List;
 
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
-    ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, settingsBtn, disarmBtn;
+    ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, systemLogBtn, disarmBtn;
     Button btnConfirm,btnStartSystemService,btnStopSystemService;
     TextView armText;
     CheckDeviceStatus stat;
@@ -43,7 +43,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         logsBtn = (ImageButton) findViewById(R.id.logsBtn);
         deviceBtn = (ImageButton) findViewById(R.id.deviceBtn);
         armBtn = (ImageButton) findViewById(R.id.armBtn);
-        settingsBtn = (ImageButton) findViewById(R.id.settingsBtn);
+        systemLogBtn = (ImageButton) findViewById(R.id.systemLogBtn);
         btnConfirm = (Button) findViewById(R.id.btnConfirm);
         btnStartSystemService= (Button) findViewById(R.id.startSystemService);
         btnStopSystemService = (Button) findViewById(R.id.stopSystemService);
@@ -54,7 +54,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         logsBtn.setOnClickListener(this);
         deviceBtn.setOnClickListener(this);
         armBtn.setOnClickListener(this);
-        settingsBtn.setOnClickListener(this);
+        systemLogBtn.setOnClickListener(this);
 
         armText = (TextView) findViewById(R.id.armTxt);
 
@@ -111,9 +111,10 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                         Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
                     }
                 break;
-            case R.id.settingsBtn:
+            case R.id.systemLogBtn:
                 //eventually start settings Activity
-                Toast.makeText(this,"Starting settings activity",Toast.LENGTH_SHORT).show();
+                Intent systemLogIntent = new Intent(this, SystemLogActivity.class);
+                startActivity(systemLogIntent);
                 break;
             case R.id.logsBtn:
                 //Build intent to start the logs activity on button action
@@ -192,6 +193,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             if(!(devicesWithProblems).isEmpty()){
                 for(String items: devicesWithProblems) {
                     Toast.makeText(this, "Please check " + items + " before alarm can be set", Toast.LENGTH_LONG).show();
+
                 }
 
             }
@@ -218,8 +220,11 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //status changes
 
         //Get the ID for the current user
-        LoginActivity login = new LoginActivity();
-       String userID = login.returnedUser.getUserID().toString();
+        //From the static variable in the JsonParser
+        //class where the User object gets created
+        //upon logging in to the app
+       JsonParser json = new JsonParser();
+        String userID = json.user.getUserID();
         if (isOnline()) {
             requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=1&user_id=" + userID);
             Toast.makeText(this,"System is armed", Toast.LENGTH_LONG).show();
@@ -238,12 +243,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         armText.setText("Arm System");
 
         //Get the ID for the current user
-        //Update the System log in the database
-        LoginActivity login = new LoginActivity();
-        String userID = login.returnedUser.getUserID().toString();
+        //From the static variable in the JsonParser
+        //class where the User object gets created
+        //upon logging in to the app
+        JsonParser json = new JsonParser();
+        String userID = json.user.getUserID();
         if (isOnline()) {
             requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=0&user_id=" + userID);
-            Toast.makeText(this,"System is armed", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"System disarmed", Toast.LENGTH_LONG).show();
             startService(new Intent(getBaseContext(), CheckDeviceService.class));
         } else {
             Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();

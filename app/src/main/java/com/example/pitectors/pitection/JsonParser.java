@@ -17,11 +17,11 @@ import org.json.JSONObject;
  * status which is updated by the Raspberry Pi.
  */
 public class JsonParser {
-
+	static User user;
 	public static User parseFeed(String content) {
 		try {
 			JSONArray ja = new JSONArray(content);
-			User user = new User();
+			 user = new User();
 			for (int i = 0; i < ja.length(); i++) {
 				JSONObject obj = ja.getJSONObject(i);
 
@@ -76,9 +76,8 @@ public class JsonParser {
 				JSONObject obj = ja.getJSONObject(i);
 				Events eventList = new Events();
 				//Creating objects from the JSON data posted in the provided URI
-				eventList.setEventDevice(obj.getString("username"));
+				eventList.setEventDevice(obj.getString("name"));
 				eventList.setEventDate(obj.getString("timestamp"));
-				eventList.setUser(obj.getString("username"));
 				eventList.setEventStatus(obj.getString("status"));
 				//Check the the status and the device type and set the
 				//event status accordingly
@@ -105,5 +104,31 @@ public class JsonParser {
 			status = obj.getString("status");
 		}
 		return status;
+	}
+
+	public static List<SystemLog> parseSystemLogs(String content) {
+		try {
+			JSONArray ja = new JSONArray(content);
+
+			//Creating a list of Event objects
+			List<SystemLog> logList = new ArrayList<>();
+
+			for (int i = 0; i < ja.length(); i++) {
+				JSONObject obj = ja.getJSONObject(i);
+				SystemLog log = new SystemLog();
+				//Creating objects from the JSON data posted in the provided URI
+				log.setUsername(obj.getString("username"));
+				log.setTimeStamp(obj.getString("timestamp"));
+				log.setStatus(obj.getString("status"));
+				//log.setSystemName(obj.getString("name"));
+
+
+				logList.add(log);
+			}
+			return logList;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

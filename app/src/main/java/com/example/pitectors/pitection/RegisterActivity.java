@@ -40,9 +40,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void updateDisplay() {
 
 			    Toast.makeText(this,"Registration successful",Toast.LENGTH_SHORT).show();
-
-
-
     }
 
     @Override
@@ -68,17 +65,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         switch(v.getId()){
             case R.id.btnRegister:
 
-                String uname = username.toString();
-                String pass = password.toString();
+                String uname = username.getText().toString();
+                String pass = password.getText().toString();
 
                 Encrypt encrypt = new Encrypt();
-                String password = pass;
-                encrypt.setPassword(password);
+                encrypt.setPassword(pass);
                 encrypt.encryptPassword();
-
+                String encryptedPassword = encrypt.getGeneratedPassword();
 
                 if(isOnline()){
-                    requestData("http://robertnice.altervista.org/pitected_registration.php?username=" + uname + "&password=" + encrypt.getGeneratedPassword());
+                    requestData("http://robertnice.altervista.org/pitected_registration.php?username=" +
+                            uname + "&password=" + encryptedPassword);
                 }
                 else{
                     Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();

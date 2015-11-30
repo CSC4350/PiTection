@@ -7,15 +7,8 @@ public class Events {
     public String eventStatus;
     private String eventDevice;
     private String eventDate;
-    private String user;
 
 
-    Events(String event, String device,String date, String user){
-        this.eventStatus = event;
-        this.eventDate = date;
-        this.eventDevice = device;
-        this.user = user;
-    }
 
     Events(){
 
@@ -44,12 +37,5 @@ public class Events {
     public void setEventDate(String eventDate) {
         this.eventDate = eventDate;
     }
-
-    public String getUser(){
-        return user;
-    }
-
-    public void setUser(String user){
-        this.user = user;
-    }
+    
 }

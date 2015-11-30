@@ -37,6 +37,10 @@
             android:name=".EventLogsActivity"
             android:label="@string/title_activity_event_logs" >
         </activity>
+        <activity
+            android:name=".SystemLogActivity"
+            android:label="@string/system_log" >
+        </activity>
 
         <service
             android:name=".CheckDeviceService"

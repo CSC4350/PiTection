@@ -78,12 +78,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void updateDisplay() {
         //userList is the information returned from the JsonParser
         String pass = password.getText().toString();
-       if(returnedUser.getUserID() != null && password.equals(returnedUser.getPassword()) ){
-           Toast.makeText(this,"Invalid credentials", Toast.LENGTH_LONG).show();
-       }
-        else{
+       if(returnedUser.getUserID() != null && pass.equals(returnedUser.getPassword()) ){
            Intent intent = new Intent(this, MainScreen.class);
            startActivity(intent);
+       }
+        else{
+           Toast.makeText(this,"Invalid credentials", Toast.LENGTH_LONG).show();
        }
 
     }
@@ -99,9 +99,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch(v.getId()){
             case R.id.loginBtn:
                 //Delete this "activate" commented code below when app is finished
-                Intent intent = new Intent(this, MainScreen.class);
-                startActivity(intent);
-                /**
+               // Intent intent = new Intent(this, MainScreen.class);
+                //startActivity(intent);
+
                 String userName = username.getText().toString();
                     String pass = password.getText().toString();
                 if(isOnline()){
@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             default:
                 Toast.makeText(getApplicationContext(), "Invalid credentials", LENGTH_SHORT).show();
 
-            */
+
         }
 
 
