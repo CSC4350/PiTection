@@ -42,7 +42,7 @@ public class CheckDeviceService extends Service {
 
     @Override
     public void onDestroy(){
-       Toast.makeText(this,"System is unarmed", Toast.LENGTH_SHORT).show();
+       Toast.makeText(this,"System disarmed", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -106,7 +106,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                 //When armed button is clicked, begin checking network connectivity
                 //request data from given URL
                     if (isOnline()) {
-                        requestData("http://robertnice.altervista.org/getDeviceData.php");
+                        requestData("http://robertnice.altervista.org/getDeviceData.php", "Request");
                     } else {
                         Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
                     }
@@ -136,15 +136,15 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
 
     //Thread pool executer allows multiple tasks in parallel
-    private void requestData( String uri) {
+    private void requestData(String uri, String type) {
         //Begins Async task for HTTP request
         MyTask task = new MyTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
+        task.execute(uri,type );
     }
 
     //Class to instantiate the Async Task class for running
     //Http Requests in the background
-    private class MyTask extends AsyncTask<String, String, String>{
+    private class MyTask extends AsyncTask<String, String, String[]>{
         //This method has access to the main thread
         //and runs before doInBackground
         @Override
@@ -153,24 +153,31 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         }
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
             //Gets the content from the URL passed to the
             //requestData method
-            String content = HttpManager.getData(params[0]);
+            String[] content = new String [2];
+            content[0] = HttpManager.getData(params[0]);
+            content[1] = params[1];
             return content;
         }
 
         //This method receives a result, depending
         //on the RunTasks<> data parameter type
         @Override
-        protected void onPostExecute(String s) {
-            try {
-                JsonParser parser = new JsonParser();
-                devicesToList = new ArrayList();
-                devicesToList = parser.parseDeviceFeed(s);
-                updateArmProgress();
-            } catch (Exception e) {
-                e.printStackTrace();
+        protected void onPostExecute(String[] result) {
+            if(result[1].equals("Request")) {
+                try {
+                    JsonParser parser = new JsonParser();
+                    devicesToList = new ArrayList();
+                    devicesToList = parser.parseDeviceFeed(result[0]);
+                    updateArmProgress();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(result[1].equals("Send")){
+                //Do nothing
             }
 
 
@@ -225,12 +232,21 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //upon logging in to the app
         JsonParser json = new JsonParser();
         String userID = json.user.getUserID();
-        UpdateSystemLog update = new UpdateSystemLog();
-        update.UpdateLog(userID,"1", getBaseContext(), getSystemService(Context.CONNECTIVITY_SERVICE));
+        if (isOnline()) {
+            requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=1" +
+                    "&user_id=" + userID, "Send");
+            Toast.makeText(this, "System armed", Toast.LENGTH_LONG).show();
+           startService(new Intent(getBaseContext(), CheckDeviceService.class));
+        } else {
+            Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
     public void stopService(View view){
+        stopService(new Intent(getBaseContext(), CheckDeviceService.class));
+        //Begin service to check for system being armed
+        btnStartSystemService.performClick();
         disarmBtn.setVisibility(View.GONE);
         armBtn.setVisibility(View.VISIBLE);
         armText.setText("Arm System");
@@ -241,12 +257,15 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //upon logging in to the app
         JsonParser json = new JsonParser();
         String userID = json.user.getUserID();
-       UpdateSystemLog update = new UpdateSystemLog();
-        update.UpdateLog(userID,"0", getBaseContext(),getSystemService(Context.CONNECTIVITY_SERVICE));
+        if (isOnline()) {
+            requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=0" +
+                    "&user_id=" + userID, "Send");
 
-        stopService(new Intent(getBaseContext(), CheckDeviceService.class));
-        //Begin service to check for system being armed
-        btnStartSystemService.performClick();
+        } else {
+            Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
 

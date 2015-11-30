@@ -46,6 +46,10 @@
             android:name=".CheckDeviceService"
             android:exported="false" >
         </service>
+        <service
+            android:name="com.example.pitectors.pitection.CheckSystemService"
+            android:exported="false" >
+        </service>
 
     </application>
 
