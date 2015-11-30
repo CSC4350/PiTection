@@ -113,8 +113,8 @@ public class SystemLogActivity extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(String s) {
 			try {
-
-				eventsToList = JsonParser.parseSystemLogs(s);
+				JsonParser parser = new JsonParser();
+				eventsToList = parser.parseSystemLogs(s);
 				updateDisplay();
 
 			} catch (Exception e) {

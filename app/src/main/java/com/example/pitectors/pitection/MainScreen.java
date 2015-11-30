@@ -165,9 +165,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         @Override
         protected void onPostExecute(String s) {
             try {
-
+                JsonParser parser = new JsonParser();
                 devicesToList = new ArrayList();
-                devicesToList = JsonParser.parseDeviceFeed(s);
+                devicesToList = parser.parseDeviceFeed(s);
                 updateArmProgress();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -223,17 +223,10 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //From the static variable in the JsonParser
         //class where the User object gets created
         //upon logging in to the app
-       JsonParser json = new JsonParser();
+        JsonParser json = new JsonParser();
         String userID = json.user.getUserID();
-        if (isOnline()) {
-            requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=1&user_id=" + userID);
-            Toast.makeText(this,"System is armed", Toast.LENGTH_LONG).show();
-            startService(new Intent(getBaseContext(), CheckDeviceService.class));
-        } else {
-            Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
-        }
-
-
+        UpdateSystemLog update = new UpdateSystemLog();
+        update.UpdateLog(userID,"1", getBaseContext(), getSystemService(Context.CONNECTIVITY_SERVICE));
 
     }
 
@@ -248,13 +241,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //upon logging in to the app
         JsonParser json = new JsonParser();
         String userID = json.user.getUserID();
-        if (isOnline()) {
-            requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=0&user_id=" + userID);
-            Toast.makeText(this,"System disarmed", Toast.LENGTH_LONG).show();
-            startService(new Intent(getBaseContext(), CheckDeviceService.class));
-        } else {
-            Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
-        }
+       UpdateSystemLog update = new UpdateSystemLog();
+        update.UpdateLog(userID,"0", getBaseContext(),getSystemService(Context.CONNECTIVITY_SERVICE));
 
         stopService(new Intent(getBaseContext(), CheckDeviceService.class));
         //Begin service to check for system being armed

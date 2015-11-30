@@ -152,8 +152,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         protected void onPostExecute(String s) {
             try {
-
-                returnedUser = JsonParser.parseFeed(s);
+            JsonParser parser = new JsonParser();
+                returnedUser = parser.parseFeed(s);
                 updateDisplay();
 
 

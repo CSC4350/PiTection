@@ -18,7 +18,7 @@ import org.json.JSONObject;
  */
 public class JsonParser {
 	static User user;
-	public static User parseFeed(String content) {
+	public  User parseFeed(String content) {
 		try {
 			JSONArray ja = new JSONArray(content);
 			 user = new User();
@@ -41,14 +41,14 @@ public class JsonParser {
 	}
 
 	//Takes content front background task, parses as JSON data for devices
-	public static List<Devices> parseDeviceFeed(String content) {
+	public  List<Devices> parseDeviceFeed(String content) {
 		try {
-			JSONArray ja = new JSONArray(content);
+			JSONArray ja1 = new JSONArray(content);
 			//Creating a list of UserDeviceStatus objects
 			List<Devices> devices = new ArrayList<>();
 
-			for (int i = 0; i < ja.length(); i++) {
-				JSONObject obj = ja.getJSONObject(i);
+			for (int i = 0; i < ja1.length(); i++) {
+				JSONObject obj = ja1.getJSONObject(i);
 				Devices devicesListed = new Devices();
 				//Creating objects from the JSON data posted in the provided URI
 				devicesListed.setDeviceName(obj.getString("name"));
@@ -65,15 +65,15 @@ public class JsonParser {
 		}
 	}
 
-	public static List<Events> parseEventFeed(String content) {
+	public  List<Events> parseEventFeed(String content) {
 		try {
-			JSONArray ja = new JSONArray(content);
+			JSONArray ja2 = new JSONArray(content);
 
 			//Creating a list of Event objects
 			List<Events> events = new ArrayList<>();
 
-			for (int i = 0; i < ja.length(); i++) {
-				JSONObject obj = ja.getJSONObject(i);
+			for (int i = 0; i < ja2.length(); i++) {
+				JSONObject obj = ja2.getJSONObject(i);
 				Events eventList = new Events();
 				//Creating objects from the JSON data posted in the provided URI
 				eventList.setEventDevice(obj.getString("name"));
@@ -92,13 +92,13 @@ public class JsonParser {
 		}
 	}
 
-	public static String parseSystemFeed(String s) throws JSONException {
-		JSONArray ja = new JSONArray(s);
+	public  String parseSystemFeed(String s) throws JSONException {
+		JSONArray ja3 = new JSONArray(s);
 
 		String status = "";
 
-		for (int i = 0; i < ja.length(); i++) {
-			JSONObject obj = ja.getJSONObject(i);
+		for (int i = 0; i < ja3.length(); i++) {
+			JSONObject obj = ja3.getJSONObject(i);
 			Events eventList = new Events();
 			//Creating objects from the JSON data posted in the provided URI
 			status = obj.getString("status");
@@ -106,15 +106,15 @@ public class JsonParser {
 		return status;
 	}
 
-	public static List<SystemLog> parseSystemLogs(String content) {
+	public  List<SystemLog> parseSystemLogs(String content) {
 		try {
-			JSONArray ja = new JSONArray(content);
+			JSONArray ja4 = new JSONArray(content);
 
 			//Creating a list of Event objects
 			List<SystemLog> logList = new ArrayList<>();
 
-			for (int i = 0; i < ja.length(); i++) {
-				JSONObject obj = ja.getJSONObject(i);
+			for (int i = 0; i < ja4.length(); i++) {
+				JSONObject obj = ja4.getJSONObject(i);
 				SystemLog log = new SystemLog();
 				//Creating objects from the JSON data posted in the provided URI
 				log.setUsername(obj.getString("username"));

@@ -100,8 +100,8 @@ public class CheckSystemService extends Service {
         @Override
         protected void onPostExecute(String s) {
             try {
-
-                status = JsonParser.parseSystemFeed(s);
+                JsonParser parser = new JsonParser();
+                status = parser.parseSystemFeed(s);
                 checkSystem(status);
 
 

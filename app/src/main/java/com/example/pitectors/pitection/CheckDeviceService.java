@@ -103,8 +103,8 @@ public class CheckDeviceService extends Service {
         @Override
         protected void onPostExecute(String s) {
             try {
-
-                deviceList = JsonParser.parseDeviceFeed(s);
+                JsonParser parser = new JsonParser();
+                deviceList = parser.parseDeviceFeed(s);
                 checkDevices(deviceList);
 
 

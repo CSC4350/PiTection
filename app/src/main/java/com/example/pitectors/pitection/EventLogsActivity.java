@@ -113,8 +113,8 @@ public class EventLogsActivity extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(String s) {
 			try {
-
-				eventsToList = JsonParser.parseEventFeed(s);
+				JsonParser parser = new JsonParser();
+				eventsToList = parser.parseEventFeed(s);
 				updateDisplay();
 
 			} catch (Exception e) {

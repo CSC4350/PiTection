@@ -120,8 +120,8 @@ public class DeviceActivity extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(String s) {
 			try {
-
-				devicesToList = JsonParser.parseDeviceFeed(s);
+				JsonParser parser = new JsonParser();
+				devicesToList = parser.parseDeviceFeed(s);
 				updateDisplay();
 
 			} catch (Exception e) {
