@@ -26,7 +26,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText username, password;
     Button loginBtn, registerBtn;
-    User returnedUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,17 +75,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateDisplay() {
-        //userList is the information returned from the JsonParser
-        String pass = password.getText().toString();
-       if(returnedUser.getUserID() != null && pass.equals(returnedUser.getPassword()) ){
-           Intent intent = new Intent(this, MainScreen.class);
-           startActivity(intent);
-       }
-        else{
-           Toast.makeText(this,"Invalid credentials", Toast.LENGTH_LONG).show();
-       }
 
+    //User object gets passed to this method
+    //which is returned from the Async task after
+    //creating the object with the information from
+    //the database using the Json parser
+    private void login(User user){
+        //When logging in, the password entered into the field
+        //is encrypted to try and match the encrypted password
+        //in the database since there is no way to decrypt the password
+        String pass = password.getText().toString();
+        Encrypt encrypt = new Encrypt();
+        encrypt.setPassword(pass);
+        encrypt.encryptPassword();
+        String encryptedPassword = encrypt.getGeneratedPassword();
+
+        Toast.makeText(this, encryptedPassword, Toast.LENGTH_LONG).show();
+        if(user.getUserID() != null && encryptedPassword.equals(user.getPassword()) ){
+            Intent intent = new Intent(this, MainScreen.class);
+            startActivity(intent);
+        }
+        else{
+            Toast.makeText(this,"Invalid credentials", Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -97,14 +109,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.loginBtn:
-                //Delete this "activate" commented code below when app is finished
-               // Intent intent = new Intent(this, MainScreen.class);
-                //startActivity(intent);
+          /*  case R.id.loginBtn:
 
                 String userName = username.getText().toString();
                     String pass = password.getText().toString();
+
                 if(isOnline()){
+
                     requestData("http://robertnice.altervista.org/getUserData.php?username=" + userName + "&password=" +
                  pass);
                 }
@@ -112,6 +123,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
                 }
                 break;
+                */
                   case R.id.registerBtn:
                 Intent regIntent = new Intent(this,RegisterActivity.class);
                 startActivity(regIntent);
@@ -152,10 +164,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         protected void onPostExecute(String s) {
             try {
-            JsonParser parser = new JsonParser();
-                returnedUser = parser.parseFeed(s);
-                updateDisplay();
+                JsonParser parse = new JsonParser();
 
+                User returnedUser = new User();
+                returnedUser = parse.parseFeed(s);
+                login(returnedUser);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -163,6 +176,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         }
+    }
+
+    public void startSystemService(View view){
+        startService(new Intent(getBaseContext(), CheckSystemService.class));
+        if(isOnline()){
+            String userName = username.getText().toString();
+            String pass = password.getText().toString();
+            Encrypt encrypt = new Encrypt();
+            encrypt.setPassword(pass);
+            encrypt.encryptPassword();
+            String encryptedPassword = encrypt.getGeneratedPassword();
+
+
+            requestData("http://robertnice.altervista.org/getUserData.php?username=" + userName + "&password=" +
+                    encryptedPassword);
+        }
+        else{
+            Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    public void stopSystemService(View view){
+
+
+        stopService(new Intent(getBaseContext(), CheckDeviceService.class));
     }
 
 

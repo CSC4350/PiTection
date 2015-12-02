@@ -40,7 +40,7 @@ public class CheckSystemService extends Service {
 
     @Override
     public void onDestroy(){
-        Toast.makeText(this, "System is unarmed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getBaseContext(), "Service stopped", Toast.LENGTH_LONG).show();
     }
 
 
@@ -57,6 +57,7 @@ public class CheckSystemService extends Service {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            Toast.makeText(getBaseContext(), "Service started", Toast.LENGTH_LONG).show();
             requestData("http://robertnice.altervista.org/getSystemStatus.php");
             if(started) {
                 start();
@@ -65,6 +66,7 @@ public class CheckSystemService extends Service {
     };
 
     public void stop() {
+
         started = false;
         handler.removeCallbacks(runnable);
     }

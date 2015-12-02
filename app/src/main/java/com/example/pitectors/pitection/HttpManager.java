@@ -49,4 +49,17 @@ public class HttpManager {
 
         return uri;
     }
+
+    public static void sendData(String uri){
+        try {
+            //Make a connection with the passed in URI to the method
+            URL url = new URL(uri);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+
+            con.connect();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
 }

@@ -246,6 +246,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     public void stopService(View view){
         stopService(new Intent(getBaseContext(), CheckDeviceService.class));
         //Begin service to check for system being armed
+        Button btnStartSystemService = (Button)findViewById(R.id.startSystemService);
         btnStartSystemService.performClick();
         disarmBtn.setVisibility(View.GONE);
         armBtn.setVisibility(View.VISIBLE);
@@ -273,12 +274,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     //screen layout that invokes the stopSystemService
     //method to stop the service
     public void performStopSystemService(){
+        Button btnStopSystemService = (Button) findViewById(R.id.stopSystemService);
         btnStopSystemService.performClick();
         //Only reason for this method to be called
         //is if the system is armed manually out of the app
         //so invoke the startService method
         //that btnConfirm onClick property is tied to
         //this will indicate on the app that the system is armed
+        Button btnConfirm = (Button)findViewById(R.id.btnConfirm);
         btnConfirm.performClick();
     }
 
