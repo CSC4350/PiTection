@@ -18,6 +18,9 @@ import android.widget.*;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +28,8 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText username, password;
-    Button loginBtn, registerBtn;
+    Button loginBtn, registerBtn, stopSystemServiceBtn;
+    String url;
 
 
     @Override
@@ -38,9 +42,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginBtn = (Button) findViewById(R.id.loginBtn);
         username = (EditText) findViewById(R.id.usernameField);
         password = (EditText) findViewById(R.id.passwordField);
+        stopSystemServiceBtn = (Button) findViewById(R.id.button);
         loginBtn.setOnClickListener(this);
         registerBtn.setOnClickListener(this);
 
+
+    }
+
+    private String readInURL() {
+        String IP = "";
+        try {
+            final  String STORETEXT="storeURL.txt";
+            InputStream in = openFileInput(STORETEXT);
+
+            if (in != null) {
+
+                InputStreamReader tmp=new InputStreamReader(in);
+
+                BufferedReader reader=new BufferedReader(tmp);
+
+                String str;
+
+                StringBuilder buf=new StringBuilder();
+
+                while ((str = reader.readLine()) != null) {
+
+                    buf.append(str);
+
+                }
+
+                in.close();
+
+                IP = buf.toString();
+
+            }
+
+        }
+
+        catch (java.io.FileNotFoundException e) {
+
+// that's OK, we probably haven't created it yet
+
+        }
+
+        catch (Throwable t) {
+
+            Toast
+
+                    .makeText(this, "Exception: "+t.toString(), Toast.LENGTH_LONG)
+
+                    .show();
+            return null;
+
+        }
+        return IP;
     }
 
     @Override
@@ -90,13 +145,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         encrypt.encryptPassword();
         String encryptedPassword = encrypt.getGeneratedPassword();
 
-        Toast.makeText(this, encryptedPassword, Toast.LENGTH_LONG).show();
+
         if(user.getUserID() != null && encryptedPassword.equals(user.getPassword()) ){
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);
         }
         else{
             Toast.makeText(this,"Invalid credentials", Toast.LENGTH_LONG).show();
+
         }
     }
 
@@ -109,23 +165,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-          /*  case R.id.loginBtn:
+            case R.id.loginBtn:
+                //Call method to get stored IP address
+                String IP = readInURL();
 
+                //Get username and encrypt the password entered to find the correct user
                 String userName = username.getText().toString();
-                    String pass = password.getText().toString();
+            String pass = password.getText().toString();
+            Encrypt encrypt = new Encrypt();
+            encrypt.setPassword(pass);
+            encrypt.encryptPassword();
+            String encryptedPassword = encrypt.getGeneratedPassword();
 
                 if(isOnline()){
 
-                    requestData("http://robertnice.altervista.org/getUserData.php?username=" + userName + "&password=" +
-                 pass);
+                    requestData(IP + "/getUserData.php?username=" + userName + "&password=" +
+                 encryptedPassword);
                 }
                 else{
                     Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
                 }
                 break;
-                */
                   case R.id.registerBtn:
-                Intent regIntent = new Intent(this,RegisterActivity.class);
+                Intent regIntent = new Intent(this,PreRegistration.class);
                 startActivity(regIntent);
                       break;
             default:
@@ -178,31 +240,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public void startSystemService(View view){
-        startService(new Intent(getBaseContext(), CheckSystemService.class));
-        if(isOnline()){
-            String userName = username.getText().toString();
-            String pass = password.getText().toString();
-            Encrypt encrypt = new Encrypt();
-            encrypt.setPassword(pass);
-            encrypt.encryptPassword();
-            String encryptedPassword = encrypt.getGeneratedPassword();
-
-
-            requestData("http://robertnice.altervista.org/getUserData.php?username=" + userName + "&password=" +
-                    encryptedPassword);
-        }
-        else{
-            Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
-        }
-
-
-    }
-
-    public void stopSystemService(View view){
-
-
-        stopService(new Intent(getBaseContext(), CheckDeviceService.class));
+    public void stopSystemService(View view)
+    {
+        stopService(new Intent(getBaseContext(), CheckSystemService.class));
     }
 
 

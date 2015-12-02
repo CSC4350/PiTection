@@ -99,8 +99,7 @@ public class JsonParser {
 
 		for (int i = 0; i < ja3.length(); i++) {
 			JSONObject obj = ja3.getJSONObject(i);
-			Events eventList = new Events();
-			//Creating objects from the JSON data posted in the provided URI
+
 			status = obj.getString("status");
 		}
 		return status;
@@ -126,6 +125,23 @@ public class JsonParser {
 				logList.add(log);
 			}
 			return logList;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public String parseSystemKey(String content) {
+		try {
+			JSONArray ja4 = new JSONArray(content);
+
+			String key = "";
+			for (int i = 0; i < ja4.length(); i++) {
+				JSONObject obj = ja4.getJSONObject(i);
+				 key = obj.getString("passphrase");
+
+			}
+			return key;
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;

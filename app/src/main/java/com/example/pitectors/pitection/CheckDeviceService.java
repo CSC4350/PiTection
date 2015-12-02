@@ -43,6 +43,7 @@ public class CheckDeviceService extends Service {
     @Override
     public void onDestroy(){
        Toast.makeText(this,"System disarmed", Toast.LENGTH_SHORT).show();
+        stop();
     }
 
 
@@ -59,6 +60,7 @@ public class CheckDeviceService extends Service {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
+            Toast.makeText(getBaseContext(), "Device service running", Toast.LENGTH_SHORT).show();
            requestData("http://robertnice.altervista.org/getDeviceData.php");
             if(started) {
                 start();
@@ -129,6 +131,8 @@ public class CheckDeviceService extends Service {
 
                 //Stop the service once a problem is found, otherwise
                 //notifications will continue popping
+                MainScreen main = new MainScreen();
+                main.performStopDeviceService();
                 stopService(new Intent(getBaseContext(), CheckDeviceService.class));
 
                 //Prep the intent to launch the Event logs activity

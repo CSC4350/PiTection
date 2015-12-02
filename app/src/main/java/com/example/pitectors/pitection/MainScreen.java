@@ -23,8 +23,8 @@ import java.util.List;
 
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
-    ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, systemLogBtn, disarmBtn;
-    Button btnConfirm,btnStartSystemService,btnStopSystemService;
+   static ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, systemLogBtn, disarmBtn;
+   static Button btnConfirm,btnStartSystemService,btnStopSystemService;
     TextView armText;
     CheckDeviceStatus stat;
     ArrayList<String> devicesWithProblems;
@@ -139,8 +139,10 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     private void requestData(String uri, String type) {
         //Begins Async task for HTTP request
         MyTask task = new MyTask();
-        task.execute(uri,type );
+        task.execute(uri, type);
     }
+
+
 
     //Class to instantiate the Async Task class for running
     //Http Requests in the background
@@ -274,15 +276,28 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     //screen layout that invokes the stopSystemService
     //method to stop the service
     public void performStopSystemService(){
-        Button btnStopSystemService = (Button) findViewById(R.id.stopSystemService);
-        btnStopSystemService.performClick();
+        armBtn.setVisibility(View.GONE);
+        btnConfirm.setVisibility(View.VISIBLE);
+        btnConfirm.performClick();
         //Only reason for this method to be called
         //is if the system is armed manually out of the app
         //so invoke the startService method
         //that btnConfirm onClick property is tied to
         //this will indicate on the app that the system is armed
-        Button btnConfirm = (Button)findViewById(R.id.btnConfirm);
-        btnConfirm.performClick();
+
+
+    }
+    //Invoked when service to check doors
+    //and motions sensors stops running
+    //to show the user that the system is
+    //no longer secure, likely due to
+    //door being opened or motion sensed
+    //while system is armed
+    public void performStopDeviceService() {
+        disarmBtn.setVisibility(View.VISIBLE);
+        armBtn.setVisibility(View.VISIBLE);
+        armText.setText("Arm System");
+
     }
 
     public void startSystemService(View view){
@@ -294,7 +309,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     public void stopSystemService(View view){
 
 
-        stopService(new Intent(getBaseContext(), CheckDeviceService.class));
+        stopService(new Intent(getBaseContext(), CheckSystemService.class));
     }
 
 

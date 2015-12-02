@@ -5,9 +5,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
-        android:name = ".ContextClass"
+        android:name=".ContextClass"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -38,21 +37,23 @@
             android:label="@string/title_activity_event_logs" >
         </activity>
         <activity
-        android:name=".SystemLogActivity"
-        android:label="@string/system_log" >
-    </activity>
+            android:name=".SystemLogActivity"
+            android:label="@string/system_log" >
+        </activity>
 
         <service
             android:name=".CheckDeviceService"
             android:exported="false" >
         </service>
         <service
-            android:name="com.example.pitectors.pitection.CheckSystemService"
+            android:name=".CheckSystemService"
             android:exported="false" >
         </service>
 
+        <activity
+            android:name=".PreRegistration"
+            android:label="@string/title_activity_pre_registration" >
+        </activity>
     </application>
-
-
 
 </manifest>

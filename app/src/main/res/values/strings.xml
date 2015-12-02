@@ -29,6 +29,7 @@
     <string name="title_activity_device">Devices</string>
     <string name="title_activity_event_logs">Device Logs</string>
     <string name="system_log">System Logs</string>
+    <string name="title_activity_pre_registration">PreRegistration</string>
 
 
 </resources>

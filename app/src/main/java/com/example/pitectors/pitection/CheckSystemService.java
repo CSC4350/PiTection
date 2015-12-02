@@ -41,6 +41,7 @@ public class CheckSystemService extends Service {
     @Override
     public void onDestroy(){
         Toast.makeText(getBaseContext(), "Service stopped", Toast.LENGTH_LONG).show();
+        stop();
     }
 
 
@@ -57,7 +58,7 @@ public class CheckSystemService extends Service {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            Toast.makeText(getBaseContext(), "Service started", Toast.LENGTH_LONG).show();
+            Toast.makeText(getBaseContext(), "System service running", Toast.LENGTH_SHORT).show();
             requestData("http://robertnice.altervista.org/getSystemStatus.php");
             if(started) {
                 start();
@@ -118,8 +119,10 @@ public class CheckSystemService extends Service {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void checkSystem(String status) {
+        Toast.makeText(getBaseContext(), "System status is: " + status, Toast.LENGTH_SHORT).show();
         //If the system has been armed, stop the service
         if(status.equals("1")){
+            stop();
         MainScreen main = new MainScreen();
 
             //Stop the service to check the system
