@@ -18,14 +18,16 @@ public class EventLogsActivity extends AppCompatActivity {
 	ListView eventList;
 	List<Events> eventsToList;
 	EventLogAdapter eventAdapter;
-
+	GetStoredIP getIP;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_event_logs);
-
+		//Call method to get stored IP address
+		getIP = new GetStoredIP();
+		String IP = getIP.readInURL();
 		if(isOnline()){
-			requestData("http://robertnice.altervista.org/device_log.php");
+			requestData(IP + "/device_log.php");
 		}
 		else{
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();

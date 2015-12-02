@@ -21,7 +21,7 @@ public class DeviceActivity extends AppCompatActivity {
 	ListView deviceList;
 	List<Devices> devicesToList;
 	DeviceAdapter deviceAdapter;
-
+	GetStoredIP getIP;
 
 
 
@@ -30,9 +30,11 @@ public class DeviceActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_device);
-
+		//Call method to get stored IP address
+		getIP = new GetStoredIP();
+		String IP = getIP.readInURL();
 		if(isOnline()){
-			requestData("http://robertnice.altervista.org/getDeviceData.php");
+			requestData(IP + "/getDeviceData.php");
 		}
 		else{
 			Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();

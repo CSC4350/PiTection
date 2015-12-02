@@ -24,6 +24,7 @@ public class CheckSystemService extends Service {
     Context context;
     String status;
     CheckDeviceStatus deviceStatus;
+    GetStoredIP getIP;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -59,7 +60,10 @@ public class CheckSystemService extends Service {
         @Override
         public void run() {
             Toast.makeText(getBaseContext(), "System service running", Toast.LENGTH_SHORT).show();
-            requestData("http://robertnice.altervista.org/getSystemStatus.php");
+            //Call method to get stored IP address
+            getIP = new GetStoredIP();
+            String IP = getIP.readInURL();
+            requestData(IP + "/getSystemStatus.php");
             if(started) {
                 start();
             }

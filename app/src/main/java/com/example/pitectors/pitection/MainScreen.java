@@ -30,7 +30,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     ArrayList<String> devicesWithProblems;
     List<Devices> devicesToList;
     CheckDeviceService checkDeviceService;
-
+    GetStoredIP getIP;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +105,11 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             case R.id.armBtn:
                 //When armed button is clicked, begin checking network connectivity
                 //request data from given URL
+                //Call method to get stored IP address
+                getIP = new GetStoredIP();
+                String IP = getIP.readInURL();
                     if (isOnline()) {
-                        requestData("http://robertnice.altervista.org/getDeviceData.php", "Request");
+                        requestData(IP + "/getDeviceData.php", "Request");
                     } else {
                         Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
                     }
@@ -234,8 +237,12 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //upon logging in to the app
         JsonParser json = new JsonParser();
         String userID = json.user.getUserID();
+        //Call method to get stored IP address
+
+        getIP = new GetStoredIP();
+        String IP = getIP.readInURL();
         if (isOnline()) {
-            requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=1" +
+            requestData(IP + "/armSystem.php?system_id=1&status=1" +
                     "&user_id=" + userID, "Send");
             Toast.makeText(this, "System armed", Toast.LENGTH_LONG).show();
            startService(new Intent(getBaseContext(), CheckDeviceService.class));
@@ -260,8 +267,12 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //upon logging in to the app
         JsonParser json = new JsonParser();
         String userID = json.user.getUserID();
+
+        //Call method to get stored IP address
+        getIP = new GetStoredIP();
+        String IP = getIP.readInURL();
         if (isOnline()) {
-            requestData("http://robertnice.altervista.org/armSystem.php?system_id=1&status=0" +
+            requestData(IP + "/armSystem.php?system_id=1&status=0" +
                     "&user_id=" + userID, "Send");
 
         } else {

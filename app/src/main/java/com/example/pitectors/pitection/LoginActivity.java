@@ -29,7 +29,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText username, password;
     Button loginBtn, registerBtn, stopSystemServiceBtn;
-    String url;
+    GetStoredIP getIP;
 
 
     @Override
@@ -47,55 +47,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         registerBtn.setOnClickListener(this);
 
 
-    }
-
-    private String readInURL() {
-        String IP = "";
-        try {
-            final  String STORETEXT="storeURL.txt";
-            InputStream in = openFileInput(STORETEXT);
-
-            if (in != null) {
-
-                InputStreamReader tmp=new InputStreamReader(in);
-
-                BufferedReader reader=new BufferedReader(tmp);
-
-                String str;
-
-                StringBuilder buf=new StringBuilder();
-
-                while ((str = reader.readLine()) != null) {
-
-                    buf.append(str);
-
-                }
-
-                in.close();
-
-                IP = buf.toString();
-
-            }
-
-        }
-
-        catch (java.io.FileNotFoundException e) {
-
-// that's OK, we probably haven't created it yet
-
-        }
-
-        catch (Throwable t) {
-
-            Toast
-
-                    .makeText(this, "Exception: "+t.toString(), Toast.LENGTH_LONG)
-
-                    .show();
-            return null;
-
-        }
-        return IP;
     }
 
     @Override
@@ -167,7 +118,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch(v.getId()){
             case R.id.loginBtn:
                 //Call method to get stored IP address
-                String IP = readInURL();
+                getIP = new GetStoredIP();
+                String IP = getIP.readInURL();
 
                 //Get username and encrypt the password entered to find the correct user
                 String userName = username.getText().toString();

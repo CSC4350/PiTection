@@ -26,6 +26,7 @@ public class CheckDeviceService extends Service {
     List<Devices> deviceList;
     CheckDeviceStatus deviceStatus;
     ArrayList<String> devicesChecked;
+    GetStoredIP getIP;
     @Override
     public void onCreate(){
         super.onCreate();
@@ -61,7 +62,10 @@ public class CheckDeviceService extends Service {
         @Override
         public void run() {
             Toast.makeText(getBaseContext(), "Device service running", Toast.LENGTH_SHORT).show();
-           requestData("http://robertnice.altervista.org/getDeviceData.php");
+            //Call method to get stored IP address
+            getIP = new GetStoredIP();
+            String IP = getIP.readInURL();
+           requestData(IP + "/getDeviceData.php");
             if(started) {
                 start();
             }
