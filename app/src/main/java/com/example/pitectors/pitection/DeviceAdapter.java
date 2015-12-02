@@ -70,11 +70,11 @@ ArrayList<Devices> list;
 		 * set a specific icon for the different statuses
 		 */
 		if(list.get(position).getDeviceStatus().equals(1)){
-			int image_warning = R.mipmap.ic_event_white_48dp;
+			int image_warning = R.mipmap.ic_report_problem_white_48dp;
 			viewHolder.image.setImageResource(image_warning);
 		}
 		else{
-			int image_ok = R.mipmap.ic_event_white_48dp;
+			int image_ok = R.mipmap.ic_verified_user_white_48dp;
 			viewHolder.image.setImageResource(image_ok);
 		}
 
