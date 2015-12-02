@@ -8,6 +8,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONStringer;
 
 /**
  * Created by Rob on 9/27/2015.
@@ -131,20 +132,16 @@ public class JsonParser {
 		}
 	}
 
-	public String parseSystemKey(String content) {
-		try {
-			JSONArray ja4 = new JSONArray(content);
+	public  String parseSystemKey(String s) throws JSONException {
+		JSONArray ja3 = new JSONArray(s);
 
-			String key = "";
-			for (int i = 0; i < ja4.length(); i++) {
-				JSONObject obj = ja4.getJSONObject(i);
-				 key = obj.getString("passphrase");
+		String key = "";
 
-			}
-			return key;
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return null;
+		for (int i = 0; i < ja3.length(); i++) {
+			JSONObject obj = ja3.getJSONObject(i);
+
+			key = obj.getString("passphrase");
 		}
+		return key;
 	}
 }

@@ -87,16 +87,6 @@
         android:textColor="@color/text"
         android:background="@color/button"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop System Service"
-        android:id="@+id/button"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-       />
-
 
 </RelativeLayout>
 

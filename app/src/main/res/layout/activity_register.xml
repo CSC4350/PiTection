@@ -35,20 +35,6 @@
         android:gravity="center"
         />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:text="password"
-        android:ems="10"
-        android:id="@+id/registerConfirm"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/registerUserpass"
-        android:layout_alignStart="@+id/registerUserpass"
-        android:textColor="@color/text"
-        android:gravity="center"
-        />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,29 +47,16 @@
         android:gravity="center"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/registerPasswordConfirm"
-        android:id="@+id/textView4"
-        android:layout_below="@+id/registerConfirm"
-        android:layout_centerHorizontal="true"
-        android:textColor="@color/text"
-        android:gravity="center"
-        />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registerButton"
         android:id="@+id/btnRegister"
         android:layout_marginTop="41dp"
-        android:layout_below="@+id/textView4"
         android:layout_centerHorizontal="true"
         android:background="@color/button"
         android:textColor="@color/text"
-        />
+        android:layout_centerVertical="true" />
 
 
 

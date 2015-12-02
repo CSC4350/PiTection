@@ -55,9 +55,11 @@ Button btnSubmit;
 	public void submitPreregistration(View view) {
 		String url = systemIP.getText().toString();
 		storeIP(url);
+		GetStoredIP getIP = new GetStoredIP();
+		String IP = getIP.readInURL();
 		if(isOnline()){
 
-			requestData(url +"/getSystemStatus.php");
+			requestData(IP + "/getSystemStatus.php");
 		}
 		else{
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();

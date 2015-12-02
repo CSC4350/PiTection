@@ -202,7 +202,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/disarmBtn"
                 android:background="@color/button"
-                android:src="@mipmap/ic_lock_open_white_48dp"
+                android:src="@mipmap/ic_lock_outline_white_48dp"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_row="0"

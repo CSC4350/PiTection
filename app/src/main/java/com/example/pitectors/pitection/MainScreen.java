@@ -25,7 +25,7 @@ import java.util.List;
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
    static ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, systemLogBtn, disarmBtn;
    static Button btnConfirm,btnStartSystemService,btnStopSystemService;
-    TextView armText;
+    static TextView armText;
     CheckDeviceStatus stat;
     ArrayList<String> devicesWithProblems;
     List<Devices> devicesToList;
@@ -305,7 +305,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     //door being opened or motion sensed
     //while system is armed
     public void performStopDeviceService() {
-        disarmBtn.setVisibility(View.VISIBLE);
+        disarmBtn.setVisibility(View.GONE);
         armBtn.setVisibility(View.VISIBLE);
         armText.setText("Arm System");
 

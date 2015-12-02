@@ -1,6 +1,7 @@
 package com.example.pitectors.pitection;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnRegister;
-    EditText username, password, confirmPass;
+    EditText username, password;
 	List<User> userList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         username = (EditText) findViewById(R.id.registerUsername);
         password = (EditText) findViewById(R.id.registerUserpass);
-        confirmPass = (EditText) findViewById(R.id.registerConfirm);
         btnRegister = (Button) findViewById(R.id.btnRegister);
 
         btnRegister.setOnClickListener(this);
@@ -40,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void updateDisplay() {
 
 			    Toast.makeText(this,"Registration successful",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
     }
 
     @Override
@@ -57,8 +59,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
-/*todo Need to add data validation for user registration, check if user exists, password should be 6-9 characters, make sure passwords match.
- */
 
     @Override
     public void onClick(View v) {
@@ -68,19 +68,28 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String uname = username.getText().toString();
                 String pass = password.getText().toString();
 
-                Encrypt encrypt = new Encrypt();
-                encrypt.setPassword(pass);
-                encrypt.encryptPassword();
-                String encryptedPassword = encrypt.getGeneratedPassword();
+                //class to validate
+                Validator validator = new Validator();
+                if(validator.validateUsername(uname) && validator.validatePassword(pass)) {
 
-                if(isOnline()){
-                    requestData("http://robertnice.altervista.org/pitected_registration.php?username=" +
-                            uname + "&password=" + encryptedPassword);
-                }
-                else{
-                    Toast.makeText(this,"Network isn't available",Toast.LENGTH_SHORT).show();
-                }
+                    Encrypt encrypt = new Encrypt();
+                    encrypt.setPassword(pass);
+                    encrypt.encryptPassword();
+                    String encryptedPassword = encrypt.getGeneratedPassword();
 
+                    if (isOnline()) {
+                        requestData("http://robertnice.altervista.org/pitected_registration.php?username=" +
+                                uname + "&password=" + encryptedPassword);
+                    } else {
+                        Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else if(!validator.validateUsername(uname)){
+                    Toast.makeText(this,"Invalid username must be 6-9 alphanumeric characters",Toast.LENGTH_SHORT).show();
+                }
+                else if(!validator.validatePassword(pass)){
+                    Toast.makeText(this,"Invalid password must be 6-9 alphanumeric characters",Toast.LENGTH_SHORT).show();
+                }
 
 
         }
