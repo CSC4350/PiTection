@@ -17,12 +17,15 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnRegister;
-    EditText username, password;
+    EditText username, password, keyCode, rfid;
 	List<User> userList;
+    GetStoredIP getIP;
+    ArrayList<String>listOfKeys;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +34,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         username = (EditText) findViewById(R.id.registerUsername);
         password = (EditText) findViewById(R.id.registerUserpass);
         btnRegister = (Button) findViewById(R.id.btnRegister);
-
+        keyCode = (EditText)findViewById(R.id.keyCode);
+        rfid = (EditText) findViewById(R.id.rfid);
         btnRegister.setOnClickListener(this);
 
 
@@ -62,47 +66,90 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch(v.getId()) {
             case R.id.btnRegister:
+                getIP = new GetStoredIP();
+                String IP = getIP.readInURL();
 
                 String uname = username.getText().toString();
                 String pass = password.getText().toString();
+                String key = keyCode.getText().toString();
+                String RFID = rfid.getText().toString();
 
-                //class to validate
-                Validator validator = new Validator();
-                if(validator.validateUsername(uname) && validator.validatePassword(pass)) {
+                ValidateRegistration validateRegistration = new ValidateRegistration();
 
-                    Encrypt encrypt = new Encrypt();
-                    encrypt.setPassword(pass);
-                    encrypt.encryptPassword();
-                    String encryptedPassword = encrypt.getGeneratedPassword();
+                if (validateRegistration.returnValidation(uname, pass, key, RFID)){
+                 if (isOnline()) {
+                    requestData(IP + "/getKeys.php", "Request");
+                } else {
+                    Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
+                }
 
-                    if (isOnline()) {
-                        requestData("http://robertnice.altervista.org/pitected_registration.php?username=" +
-                                uname + "&password=" + encryptedPassword);
-                    } else {
-                        Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else if(!validator.validateUsername(uname)){
-                    Toast.makeText(this,"Invalid username must be 6-9 alphanumeric characters",Toast.LENGTH_SHORT).show();
-                }
-                else if(!validator.validatePassword(pass)){
-                    Toast.makeText(this,"Invalid password must be 6-9 alphanumeric characters",Toast.LENGTH_SHORT).show();
-                }
+            }else{
+                //do nothing
+            }
+
+
+
 
 
         }
     }
+
+    private void keyDoesNotExist(ArrayList<String> keyList) {
+        Boolean result = false;
+      if(keyList!= null){
+          String keyCodeNum = keyCode.getText().toString();
+          for(String key: keyList){
+              if(keyCodeNum.equals(key)){
+                  result = false;
+                  break;
+
+              }
+              else{
+                 result = true;
+              }
+          }
+          if(result){
+              registerUser();
+          }
+          else{
+              Toast.makeText(this,"Key code already registered, please try another", Toast.LENGTH_SHORT).show();
+          }
+      }
+    }
+
+    public void registerUser(){
+        getIP = new GetStoredIP();
+        String IP = getIP.readInURL();
+
+        String uname = username.getText().toString();
+        String pass = password.getText().toString();
+        String rfidNum = rfid.getText().toString();
+        String keyCodeNum = keyCode.getText().toString();
+        Encrypt encrypt = new Encrypt();
+        encrypt.setPassword(pass);
+        encrypt.encryptPassword();
+        String encryptedPassword = encrypt.getGeneratedPassword();
+
+        if (isOnline()) {
+            requestData(IP + "/pitected_registration.php?username=" +
+                    uname + "&password=" + encryptedPassword + "&keyCode=" + keyCodeNum + "&RFIDCode=" + rfidNum, "Send");
+        } else {
+            Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     //Thread pool executer allows multiple tasks in parallel
-    private void requestData( String uri) {
+    private void requestData(String uri, String type) {
+        //Begins Async task for HTTP request
         MyTask task = new MyTask();
-        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, uri);
+        task.execute(uri, type);
     }
 
     //Class to instantiate the Async Task class for running
     //Http Requests in the background
-    private class MyTask extends AsyncTask<String, String, String>{
+    private class MyTask extends AsyncTask<String, String, String[]>{
         //This method has access to the main thread
         //and runs before doInBackground
         @Override
@@ -111,23 +158,32 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         @Override
-        protected String doInBackground(String... params) {
-                String content = HttpManager.getData(params[0]);
+        protected String[] doInBackground(String... params) {
+            //Gets the content from the URL passed to the
+            //requestData method
+            String[] content = new String [2];
+            content[0] = HttpManager.getData(params[0]);
+            content[1] = params[1];
             return content;
         }
 
         //This method receives a result, depending
         //on the RunTasks<> data parameter type
         @Override
-        protected void onPostExecute(String s) {
-	        try {
-
-		        //userList = JsonParser.parseFeed(s);
-		        updateDisplay();
-
-	        } catch (Exception e) {
-		        e.printStackTrace();
-	        }
+        protected void onPostExecute(String[] result) {
+            if(result[1].equals("Request")) {
+                try {
+                    JsonParser parser = new JsonParser();
+                    listOfKeys = new ArrayList<>();
+                    listOfKeys.addAll(parser.getAllKeys(result[0]));
+                    keyDoesNotExist(listOfKeys);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(result[1].equals("Send")){
+                updateDisplay();
+            }
 
 
         }

@@ -52,12 +52,53 @@
         android:layout_height="wrap_content"
         android:text="@string/registerButton"
         android:id="@+id/btnRegister"
-        android:layout_marginTop="41dp"
-        android:layout_centerHorizontal="true"
         android:background="@color/button"
         android:textColor="@color/text"
-        android:layout_centerVertical="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="46dp" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/keyCode"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/registerUserpass"
+        android:layout_alignEnd="@+id/registerUserpass"
+        android:layout_alignLeft="@+id/registerUserpass"
+        android:layout_alignStart="@+id/registerUserpass"
+        android:gravity="center"
+        android:textColor="@color/text"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rfid"
+        android:gravity="center"
+        android:textColor="@color/text"
+        android:layout_below="@+id/textView"
+        android:layout_alignRight="@+id/keyCode"
+        android:layout_alignEnd="@+id/keyCode"
+        android:layout_alignLeft="@+id/keyCode"
+        android:layout_alignStart="@+id/keyCode" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Key Code"
+        android:id="@+id/textView"
+        android:layout_below="@+id/keyCode"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/text"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RFID"
+        android:id="@+id/textView4"
+        android:layout_below="@+id/rfid"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/text"/>
 
 
 </RelativeLayout>

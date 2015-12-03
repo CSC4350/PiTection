@@ -127,6 +127,8 @@ public class CheckSystemService extends Service {
         //If the system has been armed, stop the service
         if(status.equals("1")){
             stop();
+        CheckDeviceService deviceService = new CheckDeviceService();
+            deviceService.onStartCommand(new Intent(this, CheckDeviceService.class), 0, 0);
         MainScreen main = new MainScreen();
 
             //Stop the service to check the system

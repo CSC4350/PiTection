@@ -287,9 +287,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     //screen layout that invokes the stopSystemService
     //method to stop the service
     public void performStopSystemService(){
+    if(armBtn != null) {
         armBtn.setVisibility(View.GONE);
         btnConfirm.setVisibility(View.VISIBLE);
         btnConfirm.performClick();
+    }
+        else{
+       //do nothing
+    }
         //Only reason for this method to be called
         //is if the system is armed manually out of the app
         //so invoke the startService method
@@ -322,6 +327,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
         stopService(new Intent(getBaseContext(), CheckSystemService.class));
     }
+
 
 
 

@@ -144,4 +144,25 @@ public class JsonParser {
 		}
 		return key;
 	}
+
+	public ArrayList<String> getAllKeys(String content) {
+		try {
+			JSONArray ja4 = new JSONArray(content);
+
+			//Creating a list of Event objects
+			ArrayList<String> keyList = new ArrayList<>();
+
+			for (int i = 0; i < ja4.length(); i++) {
+				JSONObject obj = ja4.getJSONObject(i);
+
+
+
+				keyList.add(obj.getString("keyCode"));
+			}
+			return keyList;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
