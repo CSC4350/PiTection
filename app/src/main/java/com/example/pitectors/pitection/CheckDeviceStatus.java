@@ -25,9 +25,10 @@ public class CheckDeviceStatus {
             openedDevices = new ArrayList<>();
 
             //Loop through the current devices, add them to openedDevices arraylist
-            //if their status is 1
+            //if their status is 1 and it is not the System status
             for (Devices device : devicesToList) {
-                if (device.getDeviceStatus().equals("1")) {
+
+                if (!device.getDeviceName().equals("system1") && device.getDeviceStatus().equals("1")) {
                     openedDevices.add(device.getDeviceName());
 
                 }

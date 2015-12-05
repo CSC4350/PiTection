@@ -95,7 +95,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         }
     }
-
+    //Method to check if the keycode already exists in the
+    //database, passed from the JsonParser
     private void keyDoesNotExist(ArrayList<String> keyList) {
         Boolean result = false;
       if(keyList!= null){
@@ -103,8 +104,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
           for(String key: keyList){
               if(keyCodeNum.equals(key)){
                   result = false;
-                  break;
-
+                  break;//break out of th for loop if a duplicate key is found, set result to false
+                  //use Toast to give user feedback
               }
               else{
                  result = true;
@@ -119,6 +120,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
       }
     }
 
+    //Invoked if all fields are valid for registration
     public void registerUser(){
         getIP = new GetStoredIP();
         String IP = getIP.readInURL();
@@ -140,15 +142,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    //Thread pool executer allows multiple tasks in parallel
+    //Method used to pass the URL and the type of
+    //task I want to be doing, Send tasks only pushes
+    //data to the database and JsonParser is not used
+    //Request uses the JsonParser to get
+    //data back
     private void requestData(String uri, String type) {
         //Begins Async task for HTTP request
         MyTask task = new MyTask();
+        //Immediately begin the doInBackground method
+        //send the url and type of task to be done
         task.execute(uri, type);
     }
 
     //Class to instantiate the Async Task class for running
-    //Http Requests in the background
+    //Http Requests in the background, Takes in a String array for the doInBackground method
     private class MyTask extends AsyncTask<String, String, String[]>{
         //This method has access to the main thread
         //and runs before doInBackground
@@ -159,8 +167,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected String[] doInBackground(String... params) {
-            //Gets the content from the URL passed to the
-            //requestData method
+            //Create a string array to hold the type of task
+            //and the String of content stripped from the given URL
+            //to be later parsed with JsonParser methods
             String[] content = new String [2];
             content[0] = HttpManager.getData(params[0]);
             content[1] = params[1];
@@ -171,6 +180,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //on the RunTasks<> data parameter type
         @Override
         protected void onPostExecute(String[] result) {
+            //If the passed task type is of the String Request
+            //then use the JsonParser, else I'm only sending data
             if(result[1].equals("Request")) {
                 try {
                     JsonParser parser = new JsonParser();

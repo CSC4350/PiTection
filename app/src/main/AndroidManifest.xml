@@ -42,11 +42,7 @@
         </activity>
 
         <service
-            android:name=".CheckDeviceService"
-            android:exported="false" >
-        </service>
-        <service
-            android:name=".CheckSystemService"
+            android:name=".CheckStatusService"
             android:exported="false" >
         </service>
 

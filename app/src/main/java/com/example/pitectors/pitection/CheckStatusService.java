@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import java.util.List;
 /**
  * Created by rnice01 on 11/14/2015.
  */
-public class CheckDeviceService extends Service {
+public class CheckStatusService extends Service {
     Context context;
     List<Devices> deviceList;
     CheckDeviceStatus deviceStatus;
@@ -61,11 +60,10 @@ public class CheckDeviceService extends Service {
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            Toast.makeText(getBaseContext(), "Device service running", Toast.LENGTH_SHORT).show();
             //Call method to get stored IP address
             getIP = new GetStoredIP();
             String IP = getIP.readInURL();
-           requestData(IP + "/getDeviceData.php");
+           requestData(IP + "/getDeviceAndSystemStatus.php");
             if(started) {
                 start();
             }
@@ -111,7 +109,24 @@ public class CheckDeviceService extends Service {
             try {
                 JsonParser parser = new JsonParser();
                 deviceList = parser.parseDeviceFeed(s);
-                checkDevices(deviceList);
+                for(Devices device: deviceList){
+                    //Check to see if the system has been armed
+                    //invoke method to then check the status of the devices
+                    //and send notification if a status of 1 is found
+                    if(device.getDeviceName().equals("system1") && device.getDeviceStatus().equals("1")){
+                        Toast.makeText(getBaseContext(), "System status: " + device.getDeviceStatus(), Toast.LENGTH_SHORT).show();
+                        checkDevices(deviceList);
+                    }//Check to see if System has been disarmed
+                    //invoke method to adjust visibility on the main screen
+                    else if(device.getDeviceName().equals("system1") && device.getDeviceStatus().equals("0")){
+                        Toast.makeText(getBaseContext(), "System status: " + device.getDeviceStatus(), Toast.LENGTH_SHORT).show();
+                        MainScreen main = new MainScreen();
+                        main.showSystemIsDisarmed();//This will check to see if the buttons can be found
+                                                    //if they are not then the app is probably not running
+                                                    //So do nothing and keep checking the system status
+                    }
+                }
+
 
 
             } catch (Exception e) {
@@ -124,6 +139,18 @@ public class CheckDeviceService extends Service {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void checkDevices(List<Devices> userList) {
+        //If this method is called, then the system is armed
+        //a method in the main screen activity is then invoked
+        //to adjust the user interface to show the user via
+        //a button that the system is armed
+        //however, if the app is not currently running then
+        //the button will not be found and a nullpointer exception will be
+        //thrown, but this is handled in the main screen method
+        //Invoke method in the main screen activity
+        MainScreen main = new MainScreen();
+        main.showSystemIsArmed();
+
+
             //Use the CheckDeviceStatus method to check
             //for any problems with doors or motion detectors
             //notification is sent if the arraylist returned is not empty
@@ -133,33 +160,9 @@ public class CheckDeviceService extends Service {
             devicesChecked.addAll(deviceStatus.getCurrentStatus(userList));
             if (!devicesChecked.isEmpty()) {
 
-                //Stop the service once a problem is found, otherwise
-                //notifications will continue popping
-                MainScreen main = new MainScreen();
-                main.performStopDeviceService();
-                stopService(new Intent(getBaseContext(), CheckDeviceService.class));
+                //Send a notificaton to the user
+                sendNotification();
 
-                //Prep the intent to launch the Event logs activity
-                //if the user interacts with the notification
-                Intent intent = new Intent(this, EventLogsActivity.class);
-
-                // use System.currentTimeMillis() to have a unique ID for the pending intent
-                PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
-
-                //Build notification to alert the user of a disturbance
-                Notification n = new Notification.Builder(this)
-                        .setContentTitle("Detected disturbance at your home!")
-                        .setContentText("Subject")
-                        .setSmallIcon(R.mipmap.ic_event_white_48dp)
-                        .setContentIntent(pIntent)
-                        .setAutoCancel(true)
-                        .build();
-
-
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-                notificationManager.notify(0, n);
 
             }
         }
@@ -167,5 +170,30 @@ public class CheckDeviceService extends Service {
             Toast.makeText(this, "Network error", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public void sendNotification(){
+        //Prep the intent to launch the Event logs activity
+        //if the user interacts with the notification
+        Intent intent = new Intent(this, EventLogsActivity.class);
+
+        // use System.currentTimeMillis() to have a unique ID for the pending intent
+        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), intent, 0);
+
+        //Build notification to alert the user of a disturbance
+        Notification n = new Notification.Builder(this)
+                .setContentTitle("Detected disturbance at your home!")
+                .setContentText("Subject")
+                .setSmallIcon(R.mipmap.ic_report_problem_white_48dp)
+                .setContentIntent(pIntent)
+                .setAutoCancel(true)
+                .build();
+
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0, n);
     }
 }

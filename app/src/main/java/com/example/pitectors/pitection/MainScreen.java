@@ -24,12 +24,10 @@ import java.util.List;
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
    static ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, systemLogBtn, disarmBtn;
-   static Button btnConfirm,btnStartSystemService,btnStopSystemService;
     static TextView armText;
-    CheckDeviceStatus stat;
+    static Button btnStartCheckStatusService;
     ArrayList<String> devicesWithProblems;
     List<Devices> devicesToList;
-    CheckDeviceService checkDeviceService;
     GetStoredIP getIP;
 
     @Override
@@ -44,9 +42,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         deviceBtn = (ImageButton) findViewById(R.id.deviceBtn);
         armBtn = (ImageButton) findViewById(R.id.armBtn);
         systemLogBtn = (ImageButton) findViewById(R.id.systemLogBtn);
-        btnConfirm = (Button) findViewById(R.id.btnConfirm);
-        btnStartSystemService= (Button) findViewById(R.id.startSystemService);
-        btnStopSystemService = (Button) findViewById(R.id.stopSystemService);
+       btnStartCheckStatusService = (Button) findViewById(R.id.startSystemService);
 
 
         disarmBtn = (ImageButton) findViewById(R.id.disarmBtn);
@@ -55,11 +51,12 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         deviceBtn.setOnClickListener(this);
         armBtn.setOnClickListener(this);
         systemLogBtn.setOnClickListener(this);
+        disarmBtn.setOnClickListener(this);
 
         armText = (TextView) findViewById(R.id.armTxt);
 
-        //Start checking the system for anyone other than current user arming system
-        btnStartSystemService.performClick();
+        //Start the status checking service once the user is logged in
+        btnStartCheckStatusService.performClick();
 
 
 
@@ -124,6 +121,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
                 Intent logsIntent = new Intent(this,EventLogsActivity.class);
                 startActivity(logsIntent);
                 break;
+            case R.id.disarmBtn:
+                disarmSystem();
 
 
         }
@@ -145,6 +144,31 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         task.execute(uri, type);
     }
 
+    public void showSystemIsArmed() {
+        //Invoked from the CheckStatusService
+        //Check if buttons can be found
+        //if they are null, then the main screen
+        //for the app is probably destroyed.
+        //So do nothing unless they can be found
+        if(armBtn != null && disarmBtn != null) {
+            armBtn.setVisibility(View.GONE);
+            disarmBtn.setVisibility(View.VISIBLE);
+            armText.setText("Disarm System");
+        }
+    }
+
+    public void showSystemIsDisarmed(){
+        //Invoked from the CheckStatusService
+        //Check if buttons can be found
+        //if they are null, then the main screen
+        //for the app is probably destroyed.
+        //So do nothing unless they can be found
+        if(disarmBtn != null){
+            disarmBtn.setVisibility(View.GONE);
+            armBtn.setVisibility(View.VISIBLE);
+            armText.setText("Arm System");
+        }
+    }
 
 
     //Class to instantiate the Async Task class for running
@@ -194,7 +218,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     //the method in the CheckDeviceStatus class
     //then returns a String list with any device
     //names that are currently opened or are detecting motion
-    //which is status 0 in the database
+    //which is status 1 in the database
     private void updateArmProgress() {
         if(devicesToList != null){
             CheckDeviceStatus checkStatus = new CheckDeviceStatus();
@@ -210,10 +234,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
             }
             else{//If the system is ready to be armed
-                //show confirm button, confirm button then starts the background service
-                //to check the database every 5 seconds for status changes
-                armBtn.setVisibility(View.GONE);
-                btnConfirm.setVisibility(View.VISIBLE);
+               //invoke the arm system method which will update the system
+                //status in the database to 1
+               armSystem();
             }
         } else{//Network error
             Toast.makeText(this , "No devices to check", Toast.LENGTH_SHORT).show();
@@ -222,14 +245,9 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
     //onClick method that runs when confirm button is pressed
     //shows the disarm button
-    public void startService(View view){
-       btnConfirm.setVisibility(View.GONE);
-        disarmBtn.setVisibility(View.VISIBLE);
-        armText.setText("Disarm System");
+    public void armSystem() {
+      showSystemIsArmed();
 
-        //Stop the system checking service once the system is armed
-        //to then begin the service to check the devices
-        btnStopSystemService.performClick();
 
         //Get the ID for the current user
         //From the static variable in the JsonParser
@@ -245,21 +263,15 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
             requestData(IP + "/armSystem.php?system_id=1&status=1" +
                     "&user_id=" + userID, "Send");
             Toast.makeText(this, "System armed", Toast.LENGTH_LONG).show();
-           startService(new Intent(getBaseContext(), CheckDeviceService.class));
         } else {
             Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    public void stopService(View view){
-        stopService(new Intent(getBaseContext(), CheckDeviceService.class));
-        //Begin service to check for system being armed
-        Button btnStartSystemService = (Button)findViewById(R.id.startSystemService);
-        btnStartSystemService.performClick();
-        disarmBtn.setVisibility(View.GONE);
-        armBtn.setVisibility(View.VISIBLE);
-        armText.setText("Arm System");
+    public void disarmSystem(){
+
+        showSystemIsDisarmed();
 
         //Get the ID for the current user
         //From the static variable in the JsonParser
@@ -282,50 +294,14 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
     }
 
-    //Method to access the perform button click
-    //method on the invisible button in the main
-    //screen layout that invokes the stopSystemService
-    //method to stop the service
-    public void performStopSystemService(){
-    if(armBtn != null) {
-        armBtn.setVisibility(View.GONE);
-        btnConfirm.setVisibility(View.VISIBLE);
-        btnConfirm.performClick();
-    }
-        else{
-       //do nothing
-    }
-        //Only reason for this method to be called
-        //is if the system is armed manually out of the app
-        //so invoke the startService method
-        //that btnConfirm onClick property is tied to
-        //this will indicate on the app that the system is armed
 
 
-    }
-    //Invoked when service to check doors
-    //and motions sensors stops running
-    //to show the user that the system is
-    //no longer secure, likely due to
-    //door being opened or motion sensed
-    //while system is armed
-    public void performStopDeviceService() {
-        disarmBtn.setVisibility(View.GONE);
-        armBtn.setVisibility(View.VISIBLE);
-        armText.setText("Arm System");
-
+    public void startCheckStatusService(View view){
+        startService(new Intent(getBaseContext(), CheckStatusService.class));
     }
 
-    public void startSystemService(View view){
-
-
-        startService(new Intent(getBaseContext(), CheckSystemService.class));
-    }
-
-    public void stopSystemService(View view){
-
-
-        stopService(new Intent(getBaseContext(), CheckSystemService.class));
+    public void stopCheckStatusService(View view){
+        stopService(new Intent(getBaseContext(), CheckStatusService.class));
     }
 
 

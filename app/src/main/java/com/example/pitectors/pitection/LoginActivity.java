@@ -28,7 +28,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText username, password;
-    Button loginBtn, registerBtn, stopSystemServiceBtn;
+    Button loginBtn, registerBtn;
     GetStoredIP getIP;
 
 
@@ -190,11 +190,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         }
-    }
-
-    public void stopSystemService(View view)
-    {
-        stopService(new Intent(getBaseContext(), CheckSystemService.class));
     }
 
 

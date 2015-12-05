@@ -210,7 +210,6 @@
                 android:layout_gravity="center"
                 android:layout_margin="4dip"
                 android:visibility="gone"
-                android:onClick="stopService"
                 />
         </TableRow>
 
@@ -222,19 +221,10 @@
                 android:background="@color/misc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Confirm"
-                android:id="@+id/btnConfirm"
-                android:layout_column="0"
-                android:onClick="startService"
-                android:visibility="gone" />
-            <Button
-                android:background="@color/misc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text=""
                 android:id="@+id/startSystemService"
                 android:layout_column="0"
-                android:onClick="startSystemService"
+                android:onClick="startCheckStatusService"
                 android:visibility="gone" />
             <Button
                 android:background="@color/misc"
