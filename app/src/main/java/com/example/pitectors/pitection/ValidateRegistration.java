@@ -76,7 +76,7 @@ public class ValidateRegistration {
 
     public Boolean validateUsernamePasswordLength(String string){
 
-        if(string.length() > 6 && string.length() < 9){
+        if(string.length() >= 6 && string.length() <= 9){
             return true;
         }
         else {
