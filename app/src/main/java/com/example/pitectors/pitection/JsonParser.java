@@ -154,21 +154,23 @@ public class JsonParser {
 		}
 	}
 
-	public ArrayList<String> getAllKeys(String content) {
+	public ArrayList<User> getAllKeys(String content) {
 		try {
 			JSONArray ja4 = new JSONArray(content);
 
 			//Creating a list of Event objects
-			ArrayList<String> keyList = new ArrayList<>();
+			ArrayList<User> userList = new ArrayList<>();
 
 			for (int i = 0; i < ja4.length(); i++) {
 				JSONObject obj = ja4.getJSONObject(i);
+				User user = new User();
+				user.setKeyCode(obj.getString("keyCode"));
+				user.setUsername(obj.getString("username"));
 
 
-
-				keyList.add(obj.getString("keyCode"));
+				userList.add(user);
 			}
-			return keyList;
+			return userList;
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;

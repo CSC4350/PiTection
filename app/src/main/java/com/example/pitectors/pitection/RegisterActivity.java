@@ -23,9 +23,8 @@ import java.util.List;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnRegister;
     EditText username, password, keyCode, rfid;
-	List<User> userList;
     GetStoredIP getIP;
-    ArrayList<String>listOfKeys;
+    ArrayList<User>listOfKeys;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,46 +96,61 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
     //Method to check if the keycode already exists in the
     //database, passed from the JsonParser
-    private void keyDoesNotExist(ArrayList<String> keyList) {
-        Boolean result = false;
+    private void keyDoesNotExist(ArrayList<User> keyList) {
+        String keyCodeNum = keyCode.getText().toString();
+        Encrypt encrypt = new Encrypt();
+        encrypt.setPassword(keyCodeNum);
+        encrypt.encryptPassword();
+        String encryptedKeyCode = encrypt.getGeneratedPassword();
+        String result = "";
       if(keyList!= null){
-          String keyCodeNum = keyCode.getText().toString();
-          for(String key: keyList){
-              if(keyCodeNum.equals(key)){
-                  result = false;
+          String user = username.getText().toString();
+          for(User key: keyList){
+
+              if(encryptedKeyCode.equals(key.getKeyCode())){
+                  result = "key";
                   break;//break out of th for loop if a duplicate key is found, set result to false
                   //use Toast to give user feedback
               }
-              else{
-                 result = true;
+              else if (user.equals(key.getUsername())) {
+                  result = "user";
+                  break;
+              } else{
+                  result = "register";
               }
           }
-          if(result){
-              registerUser();
+          if(result.equals("register")){
+              registerUser(encryptedKeyCode);
           }
-          else{
+          else if(result.equals("key")){
               Toast.makeText(this,"Key code already registered, please try another", Toast.LENGTH_SHORT).show();
+          }
+          else if(result.equals("user")){
+              Toast.makeText(this,"Username already exists, please try another", Toast.LENGTH_SHORT).show();
           }
       }
     }
 
     //Invoked if all fields are valid for registration
-    public void registerUser(){
+    public void registerUser(String encryptedKeyCode){
         getIP = new GetStoredIP();
         String IP = getIP.readInURL();
 
         String uname = username.getText().toString();
         String pass = password.getText().toString();
         String rfidNum = rfid.getText().toString();
-        String keyCodeNum = keyCode.getText().toString();
         Encrypt encrypt = new Encrypt();
         encrypt.setPassword(pass);
         encrypt.encryptPassword();
         String encryptedPassword = encrypt.getGeneratedPassword();
 
+        encrypt.setPassword(rfidNum);
+        encrypt.encryptPassword();
+        String encryptedRFID = encrypt.getGeneratedPassword();
+
         if (isOnline()) {
             requestData(IP + "/pitected_registration.php?username=" +
-                    uname + "&password=" + encryptedPassword + "&keyCode=" + keyCodeNum + "&RFIDCode=" + rfidNum, "Send");
+                    uname + "&password=" + encryptedPassword + "&keyCode=" + encryptedKeyCode + "&RFIDCode=" + encryptedRFID, "Send");
         } else {
             Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
         }

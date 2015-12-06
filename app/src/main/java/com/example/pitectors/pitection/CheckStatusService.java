@@ -42,7 +42,6 @@ public class CheckStatusService extends Service {
 
     @Override
     public void onDestroy(){
-       Toast.makeText(this,"System disarmed", Toast.LENGTH_SHORT).show();
         stop();
     }
 
@@ -114,12 +113,12 @@ public class CheckStatusService extends Service {
                     //invoke method to then check the status of the devices
                     //and send notification if a status of 1 is found
                     if(device.getDeviceName().equals("system1") && device.getDeviceStatus().equals("1")){
-                        Toast.makeText(getBaseContext(), "System status: " + device.getDeviceStatus(), Toast.LENGTH_SHORT).show();
+
                         checkDevices(deviceList);
                     }//Check to see if System has been disarmed
                     //invoke method to adjust visibility on the main screen
                     else if(device.getDeviceName().equals("system1") && device.getDeviceStatus().equals("0")){
-                        Toast.makeText(getBaseContext(), "System status: " + device.getDeviceStatus(), Toast.LENGTH_SHORT).show();
+
                         MainScreen main = new MainScreen();
                         main.showSystemIsDisarmed();//This will check to see if the buttons can be found
                                                     //if they are not then the app is probably not running
