@@ -33,7 +33,7 @@ public class Validator {
         char[] charArray = string.toCharArray();
         int length = charArray.length;
 
-        if(string.length() > 6 && string.length() < 9){
+        if(string.length() >= 6 && string.length() <= 9){
             return true;
         }
         else {
