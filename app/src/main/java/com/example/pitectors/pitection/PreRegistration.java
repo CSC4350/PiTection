@@ -54,12 +54,9 @@ Button btnSubmit;
 
 	public void submitPreregistration(View view) {
 		String url = systemIP.getText().toString();
-		storeIP(url);
-		GetStoredIP getIP = new GetStoredIP();
-		String IP = getIP.readInURL();
 		if(isOnline()){
 
-			requestData(IP + "/getSystemStatus.php");
+			requestData(url + "/getSystemStatus.php");
 		}
 		else{
 			Toast.makeText(this, "Network isn't available", Toast.LENGTH_SHORT).show();
@@ -134,7 +131,13 @@ Button btnSubmit;
 
 
 				String returnedKey = parse.parseSystemKey(s);
-				verifyKey(returnedKey);
+				if(returnedKey != null){
+					verifyKey(returnedKey);
+				}
+				else{
+					invalidIP();
+				}
+
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -144,18 +147,25 @@ Button btnSubmit;
 		}
 	}
 
+	private void invalidIP(){
+		Toast.makeText(this,"The IP address entered is incorrect", Toast.LENGTH_SHORT).show();
+	}
 	private void verifyKey(String returnedKey) {
 		String enteredKey = systemKey.getText().toString();
 		Encrypt encrypt = new Encrypt();
 		encrypt.setPassword(enteredKey);
 		encrypt.encryptPassword();
 		String encryptedPassword = encrypt.getGeneratedPassword();
+
+
 		if(returnedKey.equals(encryptedPassword)){
+			String url = systemIP.getText().toString();
+			storeIP(url);
 			Intent intent = new Intent(this, RegisterActivity.class);
 			startActivity(intent);
 		}
 		else{
-			Toast.makeText(this,"Invalid key", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this,"Invalid passphrase", Toast.LENGTH_SHORT).show();
 		}
 	}
 }

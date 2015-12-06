@@ -132,17 +132,26 @@ public class JsonParser {
 		}
 	}
 
-	public  String parseSystemKey(String s) throws JSONException {
-		JSONArray ja3 = new JSONArray(s);
+	public  String parseSystemKey(String s) {
+		try {
+			JSONArray ja3 = new JSONArray(s);
 
-		String key = "";
+			String key = "";
 
-		for (int i = 0; i < ja3.length(); i++) {
-			JSONObject obj = ja3.getJSONObject(i);
+			for (int i = 0; i < ja3.length(); i++) {
+				JSONObject obj = ja3.getJSONObject(i);
 
-			key = obj.getString("passphrase");
+				key = obj.getString("passphrase");
+			}
+			return key;
 		}
-		return key;
+		catch(JSONException ex1){
+			ex1.printStackTrace();
+			return null;
+		}
+		catch(Exception ex2){
+			return null;
+		}
 	}
 
 	public ArrayList<String> getAllKeys(String content) {
