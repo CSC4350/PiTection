@@ -15,7 +15,7 @@
         android:id="@+id/tableMain"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        >
+        android:layout_marginTop="75dp">
 
         <TableRow
 
@@ -42,7 +42,7 @@
             <TextView
                 android:layout_weight="1"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Devices"
                 android:id="@+id/textView5"
@@ -85,7 +85,7 @@
             <TextView
                 android:layout_weight="1"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Device Logs"
                 android:id="@+id/logsTxt"
@@ -96,7 +96,7 @@
                 android:layout_row="1"
                 android:layout_column="0"
                 android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"/>
+                android:gravity="center_horizontal" />
 
         </TableRow>
 
@@ -126,7 +126,7 @@
             <TextView
                 android:layout_weight="1"
                 android:layout_width="0dip"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="System Logs"
                 android:id="@+id/settingsTxt"
@@ -134,46 +134,6 @@
                 android:textStyle="bold"
                 android:layout_row="3"
                 android:layout_column="0"
-
-                android:gravity="center_horizontal"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageButton
-                android:id="@+id/logoutBtn"
-                android:background="@color/button"
-                android:layout_weight="1"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:textColor="#000000"
-                android:textSize="15dp"
-                android:src="@mipmap/ic_exit_to_app_white_48dp"
-                android:layout_row="2"
-                android:layout_column="0"
-                android:layout_gravity="center"
-                android:layout_margin="4dip"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Logout"
-                android:id="@+id/logoutTxt"
-                android:textStyle="bold"
-                android:textColor="@color/text"
-                android:layout_row="3"
-                android:layout_column="0"
-
 
                 android:gravity="center_horizontal"/>
         </TableRow>
@@ -260,5 +220,13 @@
         </TableRow>
 
     </TableLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_launcher" />
 
 </RelativeLayout>

@@ -54,7 +54,7 @@ public class UserLoginData {
     }
 
     public boolean autoLogin(){
-        Boolean result = null;
+        Boolean result = false;
         try {
             final  String STORETEXT="storeLogin.txt";
             InputStreamReader input =
@@ -69,7 +69,7 @@ public class UserLoginData {
                     result = true;
                 }
                 else{
-                    return false;
+                    result = false;
                 }
             }
 

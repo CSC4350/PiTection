@@ -1,6 +1,7 @@
 package com.example.pitectors.pitection;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -56,6 +57,20 @@ public class EventLogsActivity extends AppCompatActivity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	public void logoutUser(MenuItem item){
+		//Remove login data from locally stored file
+		//and bring user to login activity
+		UserLoginData loginData  = new UserLoginData();
+		loginData.scrubUserLogin();
+		Intent intent = new Intent(this, LoginActivity.class);
+		startActivity(intent);
+	}
+
+	public void mainMenu(MenuItem item){
+		Intent intent = new Intent(this, MainScreen.class);
+		startActivity(intent);
 	}
 
 	//Adds items to listView

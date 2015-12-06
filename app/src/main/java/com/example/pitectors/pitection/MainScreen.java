@@ -23,7 +23,7 @@ import java.util.List;
 
 
 public class MainScreen extends AppCompatActivity implements View.OnClickListener {
-   static ImageButton logoutBtn, logsBtn, deviceBtn,armBtn, systemLogBtn, disarmBtn;
+   static ImageButton logsBtn, deviceBtn,armBtn, systemLogBtn, disarmBtn;
     static TextView armText;
     static Button btnStartCheckStatusService;
     ArrayList<String> devicesWithProblems;
@@ -37,7 +37,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
 
         //Get buttons and textviews
-        logoutBtn = (ImageButton) findViewById(R.id.logoutBtn);
         logsBtn = (ImageButton) findViewById(R.id.logsBtn);
         deviceBtn = (ImageButton) findViewById(R.id.deviceBtn);
         armBtn = (ImageButton) findViewById(R.id.armBtn);
@@ -46,7 +45,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
 
 
         disarmBtn = (ImageButton) findViewById(R.id.disarmBtn);
-        logoutBtn.setOnClickListener(this);
         logsBtn.setOnClickListener(this);
         deviceBtn.setOnClickListener(this);
         armBtn.setOnClickListener(this);
@@ -85,7 +83,7 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         return super.onOptionsItemSelected(item);
     }
 
-    public void logoutUser(View view){
+    public void logoutUser(MenuItem item){
         //Remove login data from locally stored file
         //and bring user to login activity
         UserLoginData loginData  = new UserLoginData();
@@ -98,13 +96,6 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.logoutBtn:
-                //Begins login activity if clicked and scrubs stored user data
-                UserLoginData loginData = new UserLoginData();
-                loginData.scrubUserLogin();
-                Intent regIntent = new Intent(this,LoginActivity.class);
-                startActivity(regIntent);
-                break;
             case R.id.deviceBtn:
                 //Begin the device activity on click to display the user's devices
                 Intent deviceIntent = new Intent(this,DeviceActivity.class);

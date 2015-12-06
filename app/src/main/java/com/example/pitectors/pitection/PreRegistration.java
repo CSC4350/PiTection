@@ -146,7 +146,11 @@ Button btnSubmit;
 
 	private void verifyKey(String returnedKey) {
 		String enteredKey = systemKey.getText().toString();
-		if(enteredKey.equals(returnedKey)){
+		Encrypt encrypt = new Encrypt();
+		encrypt.setPassword(enteredKey);
+		encrypt.encryptPassword();
+		String encryptedPassword = encrypt.getGeneratedPassword();
+		if(returnedKey.equals(encryptedPassword)){
 			Intent intent = new Intent(this, RegisterActivity.class);
 			startActivity(intent);
 		}
