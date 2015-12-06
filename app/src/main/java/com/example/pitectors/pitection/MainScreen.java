@@ -85,12 +85,23 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         return super.onOptionsItemSelected(item);
     }
 
+    public void logoutUser(View view){
+        //Remove login data from locally stored file
+        //and bring user to login activity
+        UserLoginData loginData  = new UserLoginData();
+        loginData.scrubUserLogin();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
     //Switch statement to handle all onclick functions
     @Override
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.logoutBtn:
-                //Begins login activity if clicked
+                //Begins login activity if clicked and scrubs stored user data
+                UserLoginData loginData = new UserLoginData();
+                loginData.scrubUserLogin();
                 Intent regIntent = new Intent(this,LoginActivity.class);
                 startActivity(regIntent);
                 break;
@@ -253,8 +264,8 @@ public class MainScreen extends AppCompatActivity implements View.OnClickListene
         //From the static variable in the JsonParser
         //class where the User object gets created
         //upon logging in to the app
-        JsonParser json = new JsonParser();
-        String userID = json.user.getUserID();
+        UserLoginData loginData = new UserLoginData();
+        String userID = loginData.getStoredUser();
         //Call method to get stored IP address
 
         getIP = new GetStoredIP();

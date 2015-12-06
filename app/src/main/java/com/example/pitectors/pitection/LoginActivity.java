@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText username, password;
     Button loginBtn, registerBtn;
     GetStoredIP getIP;
+    CheckBox autoLogin;
 
 
     @Override
@@ -42,10 +43,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginBtn = (Button) findViewById(R.id.loginBtn);
         username = (EditText) findViewById(R.id.usernameField);
         password = (EditText) findViewById(R.id.passwordField);
+        autoLogin = (CheckBox) findViewById(R.id.autoLogin);
         //stopSystemServiceBtn = (Button) findViewById(R.id.button);
         loginBtn.setOnClickListener(this);
         registerBtn.setOnClickListener(this);
+        UserLoginData loginData = new UserLoginData();
 
+
+        if(loginData.autoLogin()){
+            Intent intent = new Intent(this, MainScreen.class);
+            startActivity(intent);
+        }
 
     }
 
@@ -95,9 +103,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         encrypt.setPassword(pass);
         encrypt.encryptPassword();
         String encryptedPassword = encrypt.getGeneratedPassword();
-
+        UserLoginData login = new UserLoginData();
 
         if(user.getUserID() != null && encryptedPassword.equals(user.getPassword()) ){
+            if(autoLogin.isChecked()){
+
+                login.storeUserLogin(user.getUserID());
+            }
+            else if(!autoLogin.isChecked()){
+                login.scrubUserLogin();
+            }
             Intent intent = new Intent(this, MainScreen.class);
             startActivity(intent);
         }

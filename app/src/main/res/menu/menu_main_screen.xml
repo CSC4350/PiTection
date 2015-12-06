@@ -4,9 +4,10 @@
 
     <item
         android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+        android:title="Logout"
         android:orderInCategory="100"
         app:showAsAction="never"
+        android:onClick="logoutUser"
 
         />
 </menu>
