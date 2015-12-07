@@ -33,7 +33,7 @@ public class ValidateRegistration {
     }
 
     private boolean validateRFID(String rfid) {
-        if(rfid.length() > 1 && rfid.length() < 20 && isNumbersOnly(rfid)){
+        if(rfid.length() < 1 && rfid.length() > 20){
             return true;
         }
         else{
@@ -76,7 +76,7 @@ public class ValidateRegistration {
 
     public Boolean validateUsernamePasswordLength(String string){
 
-        if(string.length() > 6 && string.length() < 9){
+        if(string.length() >= 6 && string.length() <= 9){
             return true;
         }
         else {
