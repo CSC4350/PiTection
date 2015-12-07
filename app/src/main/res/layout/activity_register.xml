@@ -68,7 +68,8 @@
         android:layout_alignLeft="@+id/registerUserpass"
         android:layout_alignStart="@+id/registerUserpass"
         android:gravity="center"
-        android:textColor="@color/text"/>
+        android:textColor="@color/text"
+        android:text="123456" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -86,6 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Key Code"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/textView"
         android:layout_below="@+id/keyCode"
         android:layout_centerHorizontal="true"
@@ -96,6 +98,7 @@
         android:layout_height="wrap_content"
         android:text="RFID"
         android:id="@+id/textView4"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_below="@+id/rfid"
         android:layout_centerHorizontal="true"
         android:textColor="@color/text"/>

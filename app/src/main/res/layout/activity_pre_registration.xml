@@ -5,7 +5,8 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context="com.example.pitectors.pitection.PreRegistration"
-                android:background="@color/background">
+                android:background="@color/background"
+   >
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,10 +36,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/systemIP"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="42dp"
-        android:text="System IP Address"
-        android:textColor="@color/text"/>
+        android:textColor="@color/text"
+        android:layout_alignRight="@+id/systemKey"
+        android:layout_alignEnd="@+id/systemKey"
+        android:layout_alignLeft="@+id/systemKey"
+        android:layout_alignStart="@+id/systemKey" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -49,7 +52,18 @@
         android:layout_above="@+id/textView3"
         android:layout_centerHorizontal="true"
         android:textColor="@color/text"
-        android:text="password"/>
+        android:text="password"
+       />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="IP Address"
+        android:id="@+id/textView6"
+        android:layout_below="@+id/systemIP"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/text" />
 
 
 </RelativeLayout>
